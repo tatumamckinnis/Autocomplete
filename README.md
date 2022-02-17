@@ -1,36 +1,38 @@
-# P5: Autocomplete, Fall 2021
+# Project 5: Autocomplete
+
+This is the directions document for Project P5 Autocomplete in CompSci 201 at Duke University, Spring 2022. Please follow the directions carefully while you complete the project. Please refer to the directions at https://coursework.cs.duke.edu/201spring22/p5-autocomplete rather than any forks or local copies in the event that any changes are made to the document.
+
+## Outline 
 - [Project Introduction](#project-introduction)
-    - [Background](#background)
-    - [Acknowledgements](#acknowledgments)
-- [Overview: What to Do](#overview-what-to-do)
-- [Overview: How to Do It](#overview-how-to-do-it)
-    - [Git](#git)
-    - [Running AutocompleteMain](#running-autocompletemain)
-    - [PrefixComparator](#prefixcomparator)
-    - [Implementing BinarySearchLibary](#implementing-binarysearchlibrary)
-    - [Implementing BinarySearchAutocomplete](#implementing-binarysearchautocomplete)
-    - [HashListAutocomplete](#hashlistautocomplete)
-    - [Extra Challenge: SlowBruteAutocomplete](#extra-challenge-slowbruteautocomplete)
+- [Part 1: Run Autocomplete Main](#part-1-run-autocomplete-main)
+- [Part 2: Implement the compare method in PrefixComparator](#part-2-implement-the-compare-method-in-prefixcomparator)
+- [Part 3: Implement BinarySearchLibrary](#part-3-implement-binarysearchlibrary)
+- [Part 4: Finish Implementing topMatches in BinarySearchAutocomplete](#part-4-finish-implementing-topmatches-in-binarysearchautocomplete)
+- [Part 5: Create and implement HashListAutocomplete](#part-5-create-and-implement-hashlistautocomplete)
 - [Analysis](#analysis)
 - [Reflect](#reflect)
 - [Grading](#grading)
 
 ## Project Introduction	
 
-### Background
+Autocomplete is an algorithm used in many modern software applications. In all of these applications, the user types text and the application suggests possible completions for that text as shown in the example images below taken from google search (on the left in March 2019 and on the right on  October 9, 2020).
+
 <details>
-<summmary>Background on Autocomplete</summary>
-
-<br>
-
-As with most backgrounds, you don't need to read this to do the assignment, but it does supply a very useful background. Autocomplete is an algorithm used in many modern software applications. In all of these applications, the user types text and the application suggests possible completions for that text as shown below -- on the left in March 2019 and on the right on  October 9, 2020.
+<summary>Expand for examples</summary>
 
 <div align="center">
   <img width="384" height="344 "src="p5-figures/googleSearch.png">
   <img width="384" height="345" src="p5-figures/googleSearch2.png">
 </div>
 
-Although finding terms that contain a query by searching through all possible results is possible, these applications need some way to select only the most useful terms to display (since users will likely not comb through thousands of terms, nor will obscure terms like "duke cookiemonster" be useful to most users). Thus, autocomplete algorithms not only need a way to find terms that start with or contain the prefix, but a way of determining how likely each one is to be useful to the user and displaying "good" terms first.
+</details>
+
+Although finding terms that contain a query by searching through all possible results is possible, these applications need some way to select only the most useful terms to display (since users will likely not comb through thousands of terms, nor will obscure terms like "duke cookiemonster" be useful to most users). Thus, autocomplete algorithms not only need a way to find terms that start with or contain the prefix, but a way of determining how likely each one is to be useful to the user and displaying "good" terms first. This all needs to be done efficiently so that a user can see completions in real time.
+
+In this project, you will leverage a `Comparator` in Java as well as the binary search algorithm on sorted data to implement an efficient autocompleter. You will create a second implementation based on a `HashMap`. You will then benchmark and analyze the tradeoffs of these implementations.  
+
+<details>
+<summary>Expand for more optional background on autocomplete</summary>
 
 According to one study, in order to be useful the algorithm must do all this in less than 100 milliseconds (see article linked below). If it takes any longer, the user will already be inputting the next keystroke (while humans do not on average input one keystroke every 50 milliseconds, additional time is required for server communication, input delay, and other processes). Furthermore, the server must be able to run this computation for every keystroke, for every user. In this assignment, you will be implementing autocomplete using three different algorithms and data structures. Your autocomplete will be different than the industrial examples described above in two ways:
 
@@ -45,92 +47,52 @@ The assignment was developed by Kevin Wayne and Matthew Drabick at Princeton Uni
 
 </details>
 
-## Overview: What to Do
+### Overview: What to Do
+
+Here's a high-level view of the assignment. This is enough information to know what to do, but not necessarily how to do it. For details, you can refer to sections later in this write-up.
+
+1. Run `AutocompleteMain` using `BruteAutoComplete` (complete in the starter code) to see how the autocomplete application works. 
+2. Implement the `compare` method in the `PrefixComparator` class that is used in the `BinarySearchAutocomplete` class. Test with `TestTerm`.
+3. Implement two methods in `BinarySearchLibrary`: `firstIndex` and `lastIndex`, both of which will use the `PrefixComparator` you completed in the previous step. Test with `TestBinarySearchLibrary`.
+3. Finish implementing `BinarySearchAutocomplete` that extends `Autocompletor` by completing the `topMatches` method. This will use the `firstIndex` and `lastIndex` methods you wrote in the previous step. Test with `TestBinarySearchAutocomplete` and running `AutocompleteMain` using `BinarySearchAutocomplete`.
+4. Create and implement a new class `HashListAutocomplete` that implements interface `Autocompletor`. Test by running `AutocompleteMain` using `HashListAutocomplete`.
+5. Run benchmarks and answer analysis questions.
+
+### Starter Code and Using Git
+You must have installed all software (Java, Git, VS Code) before you can complete the project.You can find the [directions for installation here](https://coursework.cs.duke.edu/201-public-documentation/resources-201/-/blob/main/installingSoftware.md).
+
+We'll be using Git and the installation of GitLab at [coursework.cs.duke.edu](https://coursework.cs.duke.edu). All code for classwork will be kept here. Git is software used for version control, and GitLab is an online repository to store code in the cloud using Git.
+
+**[This document details the workflow](https://coursework.cs.duke.edu/201-public-documentation/resources-201/-/blob/main/projectWorkflow.md) for downloading the starter code for the project, updating your code on coursework using Git, and ultimately submitting to Gradescope for autograding.** We recommend that you read and follow the directions carefully while working on a project! While coding, we recommend that you periodically (perhaps when completing a method or small section) push your changes as explained in Section 5.
+
+
+## Part 1: Run Autocomplete Main
+
+When you fork and clone the project you'll be able to run the `main` method of `AutocompleteMain`. Doing so will launch a "GUI" (Graphical User Interface) that allows you to select a data file. The data file will determine the set of possible words to be recommended by the autocompleter application, and also includes weights for how common the words are. Several such files are included along with this project.
+
+Once you select a file, the GUI will prompt you to enter a term. As you type, you should see the most common words that complete what you have typed so far appearing. For example, if you run `AutocompleteMain` and select the file `words-333333.txt` from the data folder you should see the output below shown in the GUI window for the search query **auto**.  You'll use this same search term, `auto` to test the other implementations you develop.
+
 <details>
-<summary>High-level what to Do</summary>
-
-<br>
-
-Here's a high-level view of the assignment. This is enough information to know what to do, but not necessarily how to do it. For details, you can refer to sections later in this write-up. You can, could, perhaps even should? also work to figure some things out on your own, referring to the later sections to clear up misunderstandings, for example.
-
-You'll be creating two classes that implement the `Autocompletor` interface you'll get when you start the project. You're given one class, `BruteAutocomplete`, that uses brute-force to find those entries that match a query; this class implements the `Autocomplete` interface. You'll compare performance with the two classes you create, `BinarySearchAutocomplete` (partially written) and `HashListAutocomplete`(not provided) and answer questions about them and their performance.
-
-You'll test your new classes with JUnit tests and *also by* running the `AutocompleteMain` class and comparing the results to known output.  The `AutocompleteMain` class launches a GUI (Graphical User Interface) supporting queries. This will run as soon as you clone/import/create your project.  The general steps you'll do to complete the project are
-
-1. Run `AutocompleteMain` to be sure it works as shown in this write-up. 
-2. Implement the `PrefixComparator.compare` method that is used in the `BinarySearchAutocomplete` class.
-3. Implement `BinarySearchAutocomplete` that extends `Autocompletor`. This requires _first implementing_ two methods in `BinarySearchLibrary`: `firstIndex` and `lastIndex`, then one method in `BinarySearchAutocomplete` -- you're given some code in that class.
-    1. There are two Test programs, one for each of these files: `TestBinarySearchLibrary` and `TestBinarySearchAutocomplete`. Run them both to help with development and debugging.
-    2. Verify results by running the `AutocompleteMain` program with this new class.
-4. Implement `HashListAutocomplete` that implements interface `Autocompletor`.
-    1. Test by verifying output compared to other implementations by running the main program with this class.
-5. ***Optional***: implement `SlowBruteAutocomplete` that extends `BruteAutocomplete`.
-
-***After implementing and testing these classes you'll complete benchmarks and analyses as explained below.***
-
-### Git
-<details>
-<summary>Git Details</summary>
-
-<br>
-
-Fork, clone, and import the cloned project from the file system. Use this URL from the course GitLab site: https://coursework.cs.duke.edu/201fall21/P5-Autocomplete. ***Be sure to fork first*** (see screen shot). Then, clone using the SSH URL after using a terminal window to `cd` into your IntelliJ workspace. 
-
-<div align="center">
-  <img src="p5-figures/gitFork.png">
-</div>
-
-When you make a series of changes you want to 'save', you'll push those changes to your GitHub repository. You should do this after major changes, certainly every hour or so of coding. You'll need to use the standard Git sequence to commit and push to GitHub:
-
-```bash
-git add .
-git commit -m 'a short description of your commit here'
-git push
-```
-
-</details>
-
-</details>
-
-## Overview: How to Do It
-<details>
-
-<summary>A faster version of Autocomplete</summary>
-
-<br>
-
-You'll run the program `AutocompleteMain`, and note its output (see below) for testing other versions
-of `Autocomplete`. Then you'll implement the class `PrefixComparator` which you'll use to implement
-an efficient version of _binary saerch_ you'll use as the basis of `BinarySearchAutocomplete`.
-
-### Running AutocompleteMain
-<details>
-<summary>Running the main program</summary>
-
-<br>
-
-When you fork and clone the project you'll be able to run the main/driver program AutocompleteMain. 
-If you run `AutocompleteMain` and select the file `words-333333.txt` from the data folder you should see the output below shown in the GUI window for the search query **auto**.  You'll use this same search term, `auto` to test the other implementations you develop.
-
+<summary>Expand for example of program running</summary>
 <div align="center">
   <img src="p5-figures/astrachanSearch.png">
 </div>
-
 </details>
 
-### PrefixComparator
-<details>
-<summary>Comparing by prefix</summary>
+By default, `AutocompleteMain` is using `BruteAutocomplete` to find the correct words to display. You will write two additional implementations of the `Autocompleter` interface: `BinarySearchAutocomplete` and `HashListAutocomplete`. When you finish one, you can again run `AutocompleteMain` using your new implementation by changing the `AUTOCOMPLETOR_CLASS_NAME` just before the `main` method of `AutocompleteMain`.
 
-<br>
 
-You'll need to implement the `compare` method in the class `PrefixComparator` so that it conforms to specifications explained here.
+## Part 2: Implement the `compare` method in `PrefixComparator`
 
 A `PrefixComparator` object is obtained by calling `PrefixComparator.getComparator` with an integer argument `r`, the size of the prefix for comparison purposes. The value is stored in the instance variable `myPrefixSize` as you'll see in the code. This class is used in `BinarySearchAutocomplete`, but not in `BruteAutocomplete`.
 
-You must use only the first `myPrefixSize` characters of the words stored in `Term` objects `v` and `w` that are passed to `PrefixComparator.compare`. However, if the length of either word is less than `myPrefixSize`, this comparator only compares up ***until the end of the shorter word.*** This means that although `"beeswax"` is greater than `"beekeeper"` when compared lexicographically, i.e., with the natural order for strings, the two words are considered equal using a `PrefixComparator.getComparator(3)` since only the first three characters are compared.
+You must use only the first `myPrefixSize` characters of the words stored in `Term` objects `v` and `w` that are passed to `PrefixComparator.compare`. However, if the length of either word is less than `myPrefixSize`, this comparator only compares up ***until the end of the shorter word.*** This means that although `"beeswax"` is greater than `"beekeeper"` when compared lexicographically, i.e., with the natural order for strings, the two words are considered equal using a `PrefixComparator.getComparator(3)` since only the first three characters are compared. You can expand below for more details and examples.
+
+<details>
+<summary>More details on PrefixComparator</summary>
 
 For a `PrefixComparator.getComparator(4)`, `"beeswax"` is greater than `"beekeeper"` since `"bees"` is greater than `"beek"`. But `"bee"` is less than `"beekeeper"` and `"beeswax"` since only the first three characters are compared --- since `"bee"` has only three characters and these three characters are the same. ***The length*** of `"bee"` ***makes it less than*** `"beekeeper"`, just as it is when eight characters are used to compare these words.
+
 
 ***Your code should examine only as many characters as needed to return a value.*** You should examine this minimal number of characters using a loop and calling `.charAt` to examine characters--- you'll need to write your loop and comparisons carefully to ensure that the prefix size is used correctly. See the table below for some examples. Recall that you can subtract characters, so `'a'` - `'b'` is a negative value and `'z'` - `'a'` is a positive value. You can also use `<` and `>` with `char` values.
 
@@ -146,85 +108,23 @@ Here is a reference table for the `PrefixComparator` comparator.
 |3|bee|=|beeswax|"bee" == "bee"|
 
 
+</details>
 
 You can test your code with the `TestTerm` JUnit class which has several tests for the `PrefixComparator` class.
 
-</details>
 
-</details>
+## Part 3: Implement `BinarySearchLibrary`
 
-## Implementing BinarySearchLibrary
+The class `BinarySearchLibrary` stores static utility methods used in the implementation of the `BinarySearchAutocomplete` class. You will need to implement two methods in particular: `firstIndex` and `lastIndex`. Both are variants on the Java API [`Collections.binarySearch(list, key, c)`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#binarySearch(java.util.List,T,java.util.Comparator)) method that, in addition to returning an index `i` such that `c.compare(list.get(i), key)==0`, also guarantee to find the first or last such index respectively. 
+
+`BinarySearchAutocomplete` will use these methods along with the `PrefixComparator` you already completed to efficiently determine the *range of possible completions of a given prefix of a word typed so far*.
+
 <details>
+<summary>Expand for details on implementing firstIndex and lastIndex</summary>
 
-<summary>A Better Binary Search</summary>
+You're given code in `BinarySearchLibrary.firstIndexSlow` that is correct, ***but does not meet performance requirements***. This slow implementation will be very slow in some situations, e.g., when a list has many equal values according to the given comparator. The code in the slow method  is **O(*N*)** where there are *N* equal values since the code could examine all the values. To meet performance criteria your code should be **O(log *N*)**, more specifically it should only need $`1 + \lceil log_2N \rceil`$ comparisons -- that is, one more than $`log_2N`$ rounded up.
 
-<br>
-
-The class `BinarySearchLibrary` stores methods used in the implementation of the `BinarySearchAutocomplete` class. Once you've implemented methods `firstIndex` and `lastIndex` in `BinarySearchLibrary`, you'll also need to implement the `BinarySearchAutocomplete.topMatches` method that will call these methods.
-
-You're given code in `BinarySearchLibrary.firstIndexSlow` that is correct, ***but does not meet performance requirements***. This slow implementation will be very slow in some situations, e.g., when a list has many equal values, as could be the case when many words share a  prefix and the comparator is a PrefixComparator comparator. The code in the slow method  is **O(*N*)** where there are *N* equal values since the code could examine all the values. To meet performance criteria your code must not be simply **O(log *N*)**, but should make at most $`1 + log_2N`$ comparisons -- that's one more than the ceiling of $`log2(N).`$ To do this we strongly, strongly, strongly suggest using the loop invariant explained below.
-
-
-### Implementing method firstIndex (and lastIndex)
-
-<br>
-
-In many implementations of binary search, variables `low` and `high` are used to bracket/delimit the range of possible values for the search target. You can see this example in the code at the end of this section that comes from `Collections.binarySearch`. ***That method does not return the first index matching a target, but _some index_ that matches.***
-
-### Invariant for `firstIndex`
-
-Instead of using the initialization of low and high shown in the code below, ***you should initialize these values to establish the following loop invariant*** -- an expression that will be true every time the loop test is evaluated, that is both before the loop executes the first time and at the end of every loop iteration.
-
-**(low, high] is interval containing  target, if target is in the list. **
-
-Notice that this is an open interval on the left, in particular this means that **`list.get(low)` cannot be equal to target.** To establish this invariant before the loop executes the first time you should consider that ***the open interval `(-1,list.length()-1]` which must contain target if it is present since this interval represents every possible index in `list`.*** Since the interval is open on the left, you cannot initialize low to zero since `(0,99]` includes 99, but not zero! So for a 100-element array you'd set `low=-1` and `high=99`, so the interval `(-1,99]` ensures that if target is present, it's either `list.get(0)` or `list.get(1)` or … `list.get(99)`.
-
-After calculating the midpoint (see reference code below), you'll need to ***re-establish the invariant by comparing the target to the middle value.*** In particular, in the while loop, if you determine (conceptually)
-
-`list[mid] < target`
-
-Then you can set low to mid since you know that before the loop `(low,high]` was the interval and if `list[mid] < target` then `(mid,high]` still maintains the invariant.
-
-Otherwise, meaning `list[mid] >= target`, then you can set `high` to `mid` since if before the loop `(low,high]` was the interval and `list[mid] >= target`, then `(low,mid]` still maintains the invariant.
-
-### Loop Termination
-
-If `low` and `high` differ by 1 in the interval `(low,high]`, and the list is sorted, then `list.get(high)` is target and `high` is the lowest/first index (if the interval isn't empty) since the interval contains a single value. This means you should use a loop guard/test that loops 
-
-`while (low+1 != high)`
-
-since you know that `low <= high` is always true. Thus, when the loop exits, you'll know that `low == high-1` and the interval `(low,high]` is the same as `(high-1,high]` -- which contains a single value -- the index whose value is `high`. 
-
-You can determine whether to return -1 (target not present) based on the value of `high` and the value of `list.get(high)`. For example, if `high` is not a valid index, the interval is empty. ***After the loop you'll need to make one more comparison*** of `a.get(high)` with `target` to see if they are equal. ***This loop will be correct and will meet the performance bounds if you develop it using the invariant.***
-
-### Summary of firstIndex as Explained
-```java
-
-int low = -1;
-int high = list.size()-1;
-// (low,high] contains target
-		
-while (low + 1 != high) {
-	int mid = (low+high)/2;
-			
-	// use comp.compare here to adjust low or high
-}
-// check that high is an index in list, if not? return -1
-// check list.get(high) to see if it's target, use comp
-```
-
-### Code for `lastIndex`
-
-You should develop a similar invariant and loop for the method `lastIndex` that you'll implement. In this case, the interval you'll consider is `[low,high)`, i.e., open on the right. Establish the invariant before the loop, and reason about how to assign to `low` or `high` depending on how the middle value compares to key. You'll initialize `low = 0` before the loop since the interval is open on the left.
-
-
-### Example and Incorrect Binary Search Code 
-
-<br>
-
-The code below returns ***some value*** equal to `target`, but ***not necessarily the first value.*** This is code from `Collections.binarySearch` rewritten to be close to the code you'll write. 
-
-***Do not use this code*** except to see how to write code using a `Comparator`. This code is the basis for `firstIndexSlow` since it is the code from the `java.util.Collections` class that finds a match, but not necessarily the first match.
+To get started, expand below to see an example of the standard Java API  [`Collections.binarySearch`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#binarySearch(java.util.List,T,java.util.Comparator)) method that has been slightly changed to use the same parameters as `firstIndex`.
 
 ```java
 public static <T> int binarySearch(List<T> list, T target,
@@ -247,12 +147,17 @@ public static <T> int binarySearch(List<T> list, T target,
 }
 ```
 
+This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. Your task is to adapt this approach so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.
 
-### Testing BinarySearchLibrary Methods
+</details>
 
-<br>
+You're given two classes to help verify that your methods are correct and meet performance requirements. The JUnit tests in `TestBinarySearchLibrary` can help you verify that your methods return the correct values. The output of running `BinaryBenchmark` can help verify both correctness and performance requirements. The output using a correct and efficient `BinarySearchLibrary` class is shown below when running `BinaryBenchmark`. 
 
-You're given two classes to help verify that your methods are correct and meet performance requirements. The JUnit tests in `TestBinarySearchLibrary` can help you verify that your methods return the correct values. The output of running `BinaryBenchmark` can help verify both ***correctness and performance requirements.*** The output using a correct `BinarySearchLibrary` class is shown below when running `BinaryBenchmark`. The values in both `index` columns should be the same: the location of the first occurrence of the prefix shown. The `cslow` column is the number of comparisons made by the slow implementation `firstIndexSlow`. The `cfast` column is the number of comparisons made by `firstIndex`. Note that $`log2(26000)`$ is 14.666, and that 1+15 = 16, so the performance criterion is met.
+<details>
+<summary>Expand for example output of BinaryBenchmark</summary>
+
+The values in both `index` columns should be the same: the location of the first occurrence of the prefix shown. The `cslow` column is the number of comparisons made by the slow implementation `firstIndexSlow`. The `cfast` column is the number of comparisons made by `firstIndex`. Note that $`log2(26000)`$ is 14.666, and that 1+15 = 16, so the performance criterion is met. It is fine if your implementation differs in where there are 15s and 16s in the last columns as long as the values are all at most 16.
+
 ```
 size of list = 26000
 Prefix index    index	  cslow   cfast
@@ -266,9 +171,7 @@ zzz	 25000    25000	   194	16
 ```
 </details>
 
-## Implementing BinarySearchAutocomplete
-<details>
-<summary>Implementing an Interface</summary>
+## Part 4: Finish Implementing `topMatches` in `BinarySearchAutocomplete`
 
 Once you've implemented the methods in class `BinarySearchLibrary`, you'll still need to implement code for `topMatches` in the `BinarySearchAutocomplete` class -- a method required as specified in the `Autocompletor` interface. The other methods in `BinarySearchAutocomplete` are written, though two rely on the code you implemented in `BinarySearchLibrary`.
 
@@ -278,17 +181,14 @@ Code in static methods `firstIndexOf` and `lastIndexOf` is written to use the AP
 
 You'll also see a `Term` object created from the `String` passed to `topMatches`. The weight for the `Term` doesn't matter since only the `String` field of the `Term` is used. You'll then implement `topMatches` as described below.
 
-
 ### Implementing topMatches Efficiently
-
-<br>
 
 The `topMatches` method requires that you return the weightiest `k` matches that match `prefix` that's a parameter to `topMatches` --- note that `k` is a parameter to the method as well. If there are `M` terms that match the prefix, then the simple method of finding the `M` matches, copying them to a list, sorting them in reverse weight order, and then choosing the first `k` of them will run in the total of the times given below. Using this approach will thus have complexity/performance of `O(log N + M log M)`. An approach after the table shows how to use a size-limited priority queue to achieve a bound of `O(log N + M log k)` to find `k` matches. Here the `log(N)` term comes from doing binary search on `N` terms.
 
 |Complexity|Reason|
 | ---      |  ---  |
 |O(log N)|Call firstIndex and lastIndex|
-|O(M log M)|Sort all M elements that match prefix|
+|O(M log(M))|Sort all M elements that match prefix|
 |O(k)|Return list of top k matches|
 
 It's possible of course that `k < M` and often `k` will be much less than `M`. Rather than sorting all `M` entries that match the prefix, you can use a size-limited priority queue using the same idea that's used in the `topMatches` method from `BruteAutocomplete`. Reference the code there for ideas. ***You must implement this approach in the code you write.***
@@ -297,18 +197,15 @@ If you implement this priority queue approach, you'll make topMatches run in `O(
 |Complexity|Reason|
 | ---      |  ---  |
 |O(log N)|Call firstIndex and lastIndex|
-|O(M log k)|Keep best k elements in priority queue|
-|O(k)|Return list of top k matches|
+|O(M log(k))|Keep best k elements in priority queue|
+|O(k log(k))|Return list of top k matches|
 
 
 You'll see code written that calls `firstIndex` and `lastIndex` which provides a range for all possible prefix matches. If there are no matches,  an empty list of `Term` objects is returned. Then there is a section of code that *you must write.*
 
 **If there are matches, model the code you write based on the `PriorityQueue` code from `BruteAutocomplete.topMatches`, but only insert the `Term` objects between `firstIndex` and `lastIndex` instead of all `Terms`. You'll then take the best `k` matches (if there are that many).**
 
-
 ### Testing BinarySearchAutocomplete
-
-<br>
 
 You're given a JUnit test class `TestBinarySearchAutocomplete` that you should run to verify your methods work correctly. You should also change the code in `AutocompleteMain` to use the `BinarySearchAutocomplete` class -- see the commented out lines as shown below. 
 Then be sure that the output using the target auto matches the output shown at the beginning of this write-up.
@@ -319,11 +216,7 @@ final static String AUTOCOMPLETOR_CLASS_NAME = BRUTE_AUTOCOMPLETE;
 //final static String AUTOCOMPLETOR_CLASS_NAME = HASHLIST_AUTOCOMPLETE;
 ```
 
-</details>
-
-
-
-## HashListAutocomplete
+## Part 5: Create and implement `HashListAutocomplete`
 <details>
 
 <summary>Implement and Test HashListAutocomplete</summary>
