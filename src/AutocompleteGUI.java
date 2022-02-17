@@ -335,12 +335,9 @@ public class AutocompleteGUI extends JFrame {
 				suggestions.setVisible(false);
 			} else {
 				int textLen = text.length();
-				//Queue<String> resultQ = new LinkedList<>();
-				Queue<Double> ds = new LinkedList<>();
 				Queue<Term> resultQ = new LinkedList<>();
 				for (Term term : auto.topMatches(text.toLowerCase(), k)) {
 					resultQ.add(term);
-					//ds.add(auto.weightOf(term));
 				}
 				if (!resultQ.isEmpty()) {
 					results = new String[resultQ.size()];
