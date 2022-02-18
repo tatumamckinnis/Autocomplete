@@ -53,9 +53,9 @@ Here's a high-level view of the assignment. This is enough information to know w
 1. Run `AutocompleteMain` using `BruteAutoComplete` (complete in the starter code) to see how the autocomplete application works. 
 2. Implement the `compare` method in the `PrefixComparator` class that is used in the `BinarySearchAutocomplete` class. Test with `TestTerm`.
 3. Implement two methods in `BinarySearchLibrary`: `firstIndex` and `lastIndex`, both of which will use the `PrefixComparator` you completed in the previous step. Test with `TestBinarySearchLibrary`.
-3. Finish implementing `BinarySearchAutocomplete` that extends `Autocompletor` by completing the `topMatches` method. This will use the `firstIndex` and `lastIndex` methods you wrote in the previous step. Test with `TestBinarySearchAutocomplete` and running `AutocompleteMain` using `BinarySearchAutocomplete`.
-4. Create and implement a new class `HashListAutocomplete` that implements interface `Autocompletor`. Test by running `AutocompleteMain` using `HashListAutocomplete`.
-5. Run benchmarks and answer analysis questions.
+4. Finish implementing `BinarySearchAutocomplete` that extends `Autocompletor` by completing the `topMatches` method. This will use the `firstIndex` and `lastIndex` methods you wrote in the previous step. Test with `TestBinarySearchAutocomplete` and running `AutocompleteMain` using `BinarySearchAutocomplete`.
+5. Create and implement a new class `HashListAutocomplete` that implements interface `Autocompletor`. Test by running `AutocompleteMain` using `HashListAutocomplete`.
+6. Run benchmarks and answer analysis questions. Submit code, analysis, and complete reflect form.
 
 ### Starter Code and Using Git
 You must have installed all software (Java, Git, VS Code) before you can complete the project.You can find the [directions for installation here](https://coursework.cs.duke.edu/201-public-documentation/resources-201/-/blob/main/installingSoftware.md).
@@ -292,38 +292,50 @@ Your method should account for every `Term` object and every String/key in the m
 </details>
 
 
-## Analysis
-<details>
-
-<summary>Analysis and Reflect</summary>
-
-<br>
+## Benchmarking and Analysis
 
 You'll submit the analysis as a PDF separate from the code in Gradescope. 
 
-1. Run the program `BenchmarkForAutocomplete` and copy/paste the results into the file you submit. You'll need to run three times, once for each of the files in the Benchmark program: `threeletterwords.txt`, `fourletterwords.txt`, and `alexa.txt`. On ola's computer, the first few lines are what's shown below for `data/threeletterwords.txt`. The unlabeled "search" is for an empty string "" which matches every string stored. These numbers are for a file of every three letter word "aaa, "aab", … "zzy", "zzz", not actual words, but 3-character strings.
+**Question 1.** Inside of `BenchmarkForAutocomplete`, uncomment the two other implementation names so that `myCompletorNames` has all three Strings: `"BruteAutocomplete"`, `"BinarySearchAutocomplete"`, and `"HashListAutocomplete"` (if you want to benchmark only a subset of these, perhaps because one isn't working, just leave it commented).
+
+Run `BenchmarkForAutocomplete` three times, once for each of the files in the Benchmark program: `threeletterwords.txt`, `fourletterwords.txt`, and `alexa.txt`. You can change which file is being used inside of the `doMark` method. **Copy and paste all three results into your analysis**. An example and detailed information about the output is described in the expandable section below.
+
+<details>
+<summary>Expand for details on Benchmark results</summary>
+
+On Professor Fain's laptop, the first few lines are what's shown below for `data/threeletterwords.txt` (in addition, the `sizeInBytes` for the implementations are shown at the bottom). These numbers are for a file of every three letter word "aaa, "aab", … "zzy", "zzz", not actual words, but 3-character strings. All times are listed in seconds.
+
+- The `init time` data shows how long it took to initialize the different implementations.
+- The `search` column shows the prefix being used to search for autocompletions; unlabeled "search" is for an empty string `""` which matches on every term. 
+- The `size` column shows how many terms have `search` as a prefix. This is described as `M` earlier in [part 4](#part-4-finish-implementing-topmatches-in-binarysearchautocomplete).
+- `#match` shows the number of highest weight results being returned by `topMatches`. This is described as `k` earlier in [part 4](#part-4-finish-implementing-topmatches-in-binarysearchautocomplete).
+- The next three columns give the running time in seconds for `topMatches` with the given parameters for the different implementations.
+
 
 ```
-init time: 0.006699	for BruteAutocomplete
-init time: 0.004799	for BinarySearchAutocomplete
-init time: 0.07067	for HashListAutocomplete
-
-search  size  #match     BruteAutoc  BinarySear HashListAu
-		17576   50      0.00238732	0.00219437	0.00019249
-		17576   50      0.00056931	0.00136807	0.00000449
-a		676     50      0.00044899	0.00015267	0.00000443
-a		676     50      0.00042797	0.00013736	0.00000575
-b		676     50      0.00051954	0.00015502	0.00000640
+init time: 0.004612     for BruteAutocomplete
+init time: 0.003348     for BinarySearchAutocomplete
+init time: 0.03887      for HashListAutocomplete
+search  size    #match  BruteAutoc      BinarySear      HashListAu
+        17576   50      0.00191738      0.00306458      0.00001950
+        17576   50      0.00039575      0.00198267      0.00000546
+a       676     50      0.00034438      0.00014479      0.00000942
+a       676     50      0.00035567      0.00015113      0.00000350
+b       676     50      0.00016033      0.00011954      0.00000292
 ...
 ```
 
-2. Run the program again for `alexa.txt` with  `matches = 10000`, paste the results, and then explain to what extent the number of matches affects the runtime. The number of matches, `matchSize`, is specified in the method `runAM` (for run all matches)
-3. Explain why the last for loop in `BruteAutocomplete.topMatches` uses a `LinkedList` (and not an `ArrayList`) AND why the `PriorityQueue` uses `Comparator.comparing(Term::getWeight)` to get the top `k` heaviest matches.
-4. Explain why `HashListAutocomplete` uses more memory than the other `Autocomplete` implementations. Be brief.
-5. Read this article from Wired: _Genome Hackers Show No One’s DNA Is Anonymous
-Anymore_ [https://courses.cs.duke.edu/compsci201/current/netid/genome-hackers-wired.pdf] and comment on some aspect of the article relating to privacy and DNA.
+</details>
 
-After completing the analysis questions you should push to Git and submit the entire project on Gradescope. ***Submit analysis and program separately.***
+**Question 2.** Let `N` be the total number of terms, let `M` be the number of terms that prefix-match a given `search` term (the `size` column above), and let `k` be the number of highest weight terms returned by `topMatches` (the `#match` column above). The runtime complexity of `BruteAutocomplete` is `O(N log(k))`. The runtime complexity of `BinarySearchAutocomplete` is `O(log(N) + M log(k))`. Yet you should notice (as seen in the example timing above) that `BruteAutocomplete` is similarly efficient or even slightly more efficient than `BinarySearchAutocomplete` on the empty `search` String `""`. Answer the following:
+- For the empty `search` String `""`, does `BruteAutocomplete` seem to be asymptotically more efficient than `BinarySearchAutocomplete` with respect to `N`, or is it just a constant factor more efficient? To answer, consider the different data sets you benchmarked with varying `size`.
+- Explain why this observation (that `BruteAutocomplete` is similarly efficient or even slightly more efficient than `BinarySearchAutocomplete` on the empty `search` String `""`) makes sense given the values of `N` and `M`. 
+- With respect to `N` and `M`, when would you expect `BinarySearchAutocomplete` to become more efficient than `BruteAutocomplete`? Does the data validate your expectation? Refer specifically to your data in answering.
+
+
+**Question 3.** Run the `BenchmarkForAutocomplete` again using `alexa.txt` but doubling `matchSize` to `100` (`matchSize` is specified in the `runAM` method). Again copy and paste your results. Recall that `matchSize` determines `k`, the number of highest weight terms returned by `topMatches` (the `#match` column above). Do your data support the hypothesis that the dependence of the runtime on `k` is logarithmic for `BruteAutocomplete` and `BinarySearchAutocomplete`?
+
+**Question 4.** Briefly explain why `HashListAutocomplete` is much more efficient in terms of the empirical runtime of `topMatches`, but uses more memory than the other `Autocomplete` implementations.
 
 
 ## Submitting, Reflect, and Grading 
