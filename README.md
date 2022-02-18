@@ -149,7 +149,7 @@ public static <T> int binarySearch(List<T> list, T target,
 
 This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. **Your task is to adapt this approach so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.** 
 
-At a high level, note that binary search is efficient because at each iteration of the `while` loop it reduces the effective search range (`high`-`low`) by a multiplicative factor of 2, leading to the **O(log *N*)** performance. Your algorithm will need to do this as well. Hoewver, the example code shown above `return`s as soon as it finds a match. You will need to change this so that your algorithm keeps searching to find the first or last match respectively.
+At a high level, note that binary search is efficient because at each iteration of the `while` loop it reduces the effective search range (`high`-`low`) by a multiplicative factor of 2, leading to the **O(log *N*)** performance. It is also correct because of the following *loop invariant* - at the start of the loop, the target is always at an index between `low` and `high` (if it is in the list). Your algorithm will need to do this as well. Hoewver, the example code shown above `return`s as soon as it finds a match. You will need to change this so that your algorithm keeps searching to find the first or last match respectively.
 
 While this does not necessarily entail writing a lot of code, it will require you to think very carefully about how to adapt the binary search algorithm. Edge case details like a whether to add or subtract 1, using `<` vs. `<=`, etc., may be important. We strongly encourage you to work through small examples of your algorithm by hand and/or to use the debugger to step through the execution of your code if it is not working as you expect. 
 
@@ -179,15 +179,23 @@ zzz	 25000    25000	   194	16
 
 Once you've implemented the methods in class `BinarySearchLibrary`, you'll still need to implement code for `topMatches` in the `BinarySearchAutocomplete` class -- a method required as specified in the `Autocompletor` interface. The other methods in `BinarySearchAutocomplete` are written, though two rely on the code you implemented in `BinarySearchLibrary`.
 
-### Code Already Written
+There is a comment in the `topMatches` method indicating where you need to add more to complete the implementation. You can expand below for more details on the code already written in `topMatches` that you do not need to change.
+
+<details>
+<summary>Expand for details on code already written in topMatches</summary>
 
 Code in static methods `firstIndexOf` and `lastIndexOf` is written to use the API exported by `BinarySearchLibrary`. You'll see that the `Term[]` parameter to these methods is transformed to a `List<Term>` since that's the type of parameter that must be passed to `BinarySearchLibrary` methods. 
 
-You'll also see a `Term` object created from the `String` passed to `topMatches`. The weight for the `Term` doesn't matter since only the `String` field of the `Term` is used. You'll then implement `topMatches` as described below.
+You'll also see a `Term` object called `dummy` created from the `String` passed to `topMatches`. The weight for the `Term` doesn't matter since only the `String` field of the `Term` is used in `firstIndex` and `lastIndex` calls.
 
-### Implementing topMatches Efficiently
+</details>
 
-The `topMatches` method requires that you return the weightiest `k` matches that match `prefix` that's a parameter to `topMatches` --- note that `k` is a parameter to the method as well. If there are `M` terms that match the prefix, then the simple method of finding the `M` matches, copying them to a list, sorting them in reverse weight order, and then choosing the first `k` of them will run in the total of the times given below. Using this approach will thus have complexity/performance of `O(log N + M log M)`. An approach after the table shows how to use a size-limited priority queue to achieve a bound of `O(log N + M log k)` to find `k` matches. Here the `log(N)` term comes from doing binary search on `N` terms.
+The `topMatches` method requires that you return the weightiest `k` matches that match `prefix` that's a parameter to `topMatches` --- note that `k` is a parameter to the method as well -- in order of weight. The calls to `firstIndex` and `lastIndex` give the first and last indices of `myTerms` that match. The code you write will need to return the `k` greatest `weight` of these in order. If there are fewer than `k` matches, it should just return all of the matches in order. Expand below for more details on how to do this efficiently using a `PriorityQueue`. 
+
+<details>
+<summary>Expand for details on efficient implementation of topMatches</summary> 
+
+The binary search in the `firstIndex` and `lastIndex` methods are both `O(log N)`. Then, if there are `M` terms that match the prefix, then the simple method of finding the `M` matches, copying them to a list, sorting them in reverse weight order, and then choosing the first `k` of them will run in the total of the times given below. Using this approach will thus have complexity/performance of `O(log N + M log M)`. 
 
 |Complexity|Reason|
 | ---      |  ---  |
@@ -195,24 +203,19 @@ The `topMatches` method requires that you return the weightiest `k` matches that
 |O(M log(M))|Sort all M elements that match prefix|
 |O(k)|Return list of top k matches|
 
-It's possible of course that `k < M` and often `k` will be much less than `M`. Rather than sorting all `M` entries that match the prefix, you can use a size-limited priority queue using the same idea that's used in the `topMatches` method from `BruteAutocomplete`. Reference the code there for ideas. ***You must implement this approach in the code you write.***
-If you implement this priority queue approach, you'll make topMatches run in `O(log N + M log k)` time instead of `O(log N + M log M)` using the ideas from the table above. In benchmarking, there is no noticeable difference for the data files you're given for small values of `M`, though with larger values of `M` there will be a difference. In particular, when the prefix is the empty string, which matches every `Term`, there will be a difference.
+It's quite possible that `k < M`, and often `k` will be *much* less than `M`. Rather than sorting all `M` entries that match the prefix, you can use a size-limited priority queue using the same idea that's used in the `topMatches` method from `BruteAutocomplete`. Reference the code there for ideas. ***This is the approach you should implement.***
+
+This should make `topMatches` run in `O(log N + M log k)` time instead of `O(log N + M log M)`. In benchmarking, there may not be a noticeable difference for the data files you're given for small values of `M`, though with larger values of `M` there will be a difference.
 
 |Complexity|Reason|
 | ---      |  ---  |
 |O(log N)|Call firstIndex and lastIndex|
 |O(M log(k))|Keep best k elements in priority queue|
-|O(k log(k))|Return list of top k matches|
+|O(k log(k))|Return list of top k matches, removing one at a time from priority queue|
 
+</details>
 
-You'll see code written that calls `firstIndex` and `lastIndex` which provides a range for all possible prefix matches. If there are no matches,  an empty list of `Term` objects is returned. Then there is a section of code that *you must write.*
-
-**If there are matches, model the code you write based on the `PriorityQueue` code from `BruteAutocomplete.topMatches`, but only insert the `Term` objects between `firstIndex` and `lastIndex` instead of all `Terms`. You'll then take the best `k` matches (if there are that many).**
-
-### Testing BinarySearchAutocomplete
-
-You're given a JUnit test class `TestBinarySearchAutocomplete` that you should run to verify your methods work correctly. You should also change the code in `AutocompleteMain` to use the `BinarySearchAutocomplete` class -- see the commented out lines as shown below. 
-Then be sure that the output using the target auto matches the output shown at the beginning of this write-up.
+You're given a JUnit test class `TestBinarySearchAutocomplete` that you should run to verify your methods work correctly. You should also change the code in `AutocompleteMain` to use the `BinarySearchAutocomplete` class -- see the commented out lines as shown below. Then be sure that the output matches what you saw earlier when running the `main` method using `BruteAutocomplete`.
 
 ```java
 final static String AUTOCOMPLETOR_CLASS_NAME = BRUTE_AUTOCOMPLETE;
