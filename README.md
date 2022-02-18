@@ -143,11 +143,15 @@ public static <T> int binarySearch(List<T> list, T target,
         else
             return mid; // target found
      }
-     return -(low + 1);  // target not found
+     return -1;  // target not found
 }
 ```
 
-This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. Your task is to adapt this approach so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.
+This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. **Your task is to adapt this approach so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.** 
+
+At a high level, note that binary search is efficient because at each iteration of the `while` loop it reduces the effective search range (`high`-`low`) by a multiplicative factor of 2, leading to the **O(log *N*)** performance. Your algorithm will need to do this as well. Hoewver, the example code shown above `return`s as soon as it finds a match. You will need to change this so that your algorithm keeps searching to find the first or last match respectively.
+
+While this does not necessarily entail writing a lot of code, it will require you to think very carefully about how to adapt the binary search algorithm. Edge case details like a whether to add or subtract 1, using `<` vs. `<=`, etc., may be important. We strongly encourage you to work through small examples of your algorithm by hand and/or to use the debugger to step through the execution of your code if it is not working as you expect. 
 
 </details>
 
