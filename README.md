@@ -9,9 +9,8 @@ This is the directions document for Project P5 Autocomplete in CompSci 201 at Du
 - [Part 3: Implement BinarySearchLibrary](#part-3-implement-binarysearchlibrary)
 - [Part 4: Finish Implementing topMatches in BinarySearchAutocomplete](#part-4-finish-implementing-topmatches-in-binarysearchautocomplete)
 - [Part 5: Create and implement HashListAutocomplete](#part-5-create-and-implement-hashlistautocomplete)
-- [Analysis](#analysis)
-- [Reflect](#reflect)
-- [Grading](#grading)
+- [Benchmarking and Analysis](#benchmarking-and-analysis)
+- [Submitting, Reflect, and Grading](#submitting-reflect-and-grading)
 
 ## Project Introduction	
 
@@ -292,30 +291,6 @@ Your method should account for every `Term` object and every String/key in the m
 
 </details>
 
-## Extra Challenge: SlowBruteAutocomplete
-<details>
-
-<summary>Extra Challenge is not required</summary>
-
-<br>
-
-The code in `BruteAutoComplete` uses a priority queue in `topMatches`. It's also possible to sort all the elements to find the top `M` matches from `N`. The code below is a partially complete version of `topMatches` that uses this idea.
-
-```java
-public List<Term> slowTopM(String prefix, int k) {
-    List<Term> list = new ArrayList<>();
-    for (Term t : myTerms) {
-        if (t.getWord().startsWith(prefix)) {
-            list.add(t);
-        }
-    }
-    Collections.sort(list),Comparator.comparing(Term::getWeight).reversed());
-    // continue with implementation here
-```
-
-For extra credit, implement a class `SlowBruteAutocomplete` that extends `BruteAutocomplete` and that overrides the method `topMatches` to use code based on what's shown above. IntelliJ will indicate you need to implement a specific constructor and call `super(terms,weights)`, the constructor in the base/parent class. ***You'll also need to change*** the instance variables in `BruteAutocomplete` from `private` to `protected` so they can be accessed in the new class. Test this class and add it to the `BenchMarkForAutocomplete` class so you can get timing data on how it works. Include comments on the efficiency of this class in comments you add to the beginning of the class in `SlowBruteAutocomplete.java. `
-
-</details>
 
 ## Analysis
 <details>
@@ -351,41 +326,21 @@ Anymore_ [https://courses.cs.duke.edu/compsci201/current/netid/genome-hackers-wi
 After completing the analysis questions you should push to Git and submit the entire project on Gradescope. ***Submit analysis and program separately.***
 
 
-## Reflect
+## Submitting, Reflect, and Grading 
 
-Complete the reflect: https://do-compsci.com/201fall21-p5-reflect
+Push your code to Git. Do this often. Once you have run and tested your completed program locally:
 
-</details>
+1. Submit your code on gradescope to the autograder.
+2. Submit a PDF to Gradescope in the separate Analysis assignment. Be sure to mark pages for the questions as explained in the [gradescope documentation here](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#submitting_a_pdf).
+3. Complete the [reflect form linked here TODO - ADD LINK](TODO).
 
-## Grading
-<details>
-
-<summary>Expand for Grading</summary>
-
-<br>
+For this project, the grading will be:
 
 | Points | Grading Criteria |
 | ------ | ------ |
-| 4 | Code Comparator|
-| 8 |  Code for BinarySearchLibrary firstIndex and lastIndex |
+| 4 | Code Comparator |
+| 8 | Code for BinarySearchLibrary firstIndex and lastIndex |
 | 6 | Code for BinarySearchAutocomplete.topMatches |
 | 9 | Code for HashListAutocomplete |
 | 1 | API |
-| 8 | Analysis code and questions answered. UTAs will grade and comment on this |
-
-
-We will map total points you earn to scores as follows. We will record the letter grade as your grade for this assignment. For example, a score in the range of 32-26 will range from A- to A+.
-
-32-36:  A<br>
-26-31:  B<br>
-20-25:  C<br>
-14-19:  D
-
-
-There is no extra credit for `SlowBruteAutocomplete`, it is a challenge for "fun". You must be sure to add comments at the top of the source `SlowBruteAutocomplete.java` file with information on timing you get from the benchmark class. The benchmark class you submit should include this new class as well.
-
-</details>
-
-
-
-
+| 8 | Analysis and reflect |
