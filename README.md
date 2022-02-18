@@ -224,23 +224,23 @@ final static String AUTOCOMPLETOR_CLASS_NAME = BRUTE_AUTOCOMPLETE;
 ```
 
 ## Part 5: Create and implement `HashListAutocomplete`
-<details>
 
-<summary>Implement and Test HashListAutocomplete</summary>
+In this part, you will create one more implementation of the `Autocompletor` interface. Unlike `BruteAutocomplete` and `BinarySearchAutocomplete`, this third implementation will be based on the use of a `HashMap` instead of the binary search algorithm. This class will provide an `O(1)` implementation of `topMatches` --- with a tradeoff of requiring more memory.
 
-<br>
-
-Create a class named `HashListAutocomplete` that implements the `Autocompletor` interface. You'll do this be creating a new class, and ensuring that it `implements Autocomplete` -- then allowing IntelliJ to fill in the methods for the interface.  This class will provide an `O(1)` implementation of `topMatches` --- with a tradeoff of requiring more memory. The method outlined here is a hybrid of the approach outlined in the article referenced at the beginning of this write-up.
-
-The class maintains a `HashMap` of _every possible prefix_ (for each term) (up to the number of characters specified by a constant `MAX_PREFIX` that you should set to 10 as shown. 
+Create a class named `HashListAutocomplete` in a new `HashListAutocomplete.java` file that `implements` the `Autocompletor` interface. The declaration of the class and the instance variables you will need are shown in the code below. 
 
 ```java
-private static final int MAX_PREFIX = 10;
-private Map<String, List<Term>> myMap;
-private int mySize;
+public class HashListAutocomplete implements Autocompletor {
+
+    private static final int MAX_PREFIX = 10;
+    private Map<String, List<Term>> myMap;
+    private int mySize;
+}
 ```
 
-The key in the map is a prefix/substring. The value for each prefix key is a weight-sorted list of `Term` objects that share that prefix. The diagram below shows part of such a `HashMap`. Three prefixes are shown---the corresponding values are shown as a weight-sorted list of `Term` objects.
+VS Code should give you the option to add stub methods for all those required to implement the `Autocompletor` interface, or you can add them manually. You will need to implement a constructor, `initialize`, `topMatches`, and `sizeInBytes` (details below).
+
+The class should maintain a `HashMap` of _every possible prefix_ (for each term) (up to the number of characters specified by a constant `MAX_PREFIX` that you should set to 10 as shown. The key in the map is a prefix/substring. The value for each prefix key is a weight-sorted list of `Term` objects that share that prefix. The diagram below shows part of such a `HashMap`. Three prefixes are shown---the corresponding values are shown as a weight-sorted list of `Term` objects.
 
 |Prefix|Term Objects|
 | --   |    ----    |
@@ -248,24 +248,47 @@ The key in the map is a prefix/substring. The value for each prefix key is a wei
 |"cho"|("chomp",40), ("chocolate",10)|
 |"cha | ("chat",50), ("champ", 30)|
 
-You should create a constructor similar to those in the other implementations. The constructor body is one line: a call to `initialize()` -- though you'll need to throw exceptions just as the other implementations throw.
+Details on the four specific methods you need to write are in the expandable sections below.
 
-***For each `Term` in `initialize`, use the first `MAX_PREFIX` substrings as a key in the map the class maintains and uses.*** For each prefix you'll store the `Term` objects with that prefix in an `ArrayList` that is the corresponding value for the prefix in the map.
+<details>
+<summary>Expand for details on the constructor</summary>
 
-***After all keys and values*** have been entered into the map, you'll write code to sort every value in the map, that is each `ArrayList` corresponding to each prefix. You must use a `Comparator.comparing(Term::getWeight).reversed()` object to sort so that the list is maintained sorted from high to low by weight, e.g., see below, and sort using this idea for each list associated with a key in the map.
+You should create a constructor similar to those in the other implementations like `BruteAutocomplete` and `BinarySearchAutocomplete`; look at those for examples. The constructor calls just checks for invalid conditions and throws exceptions in those cases, otherwise it should simply call the `initialize()` method passing `terms` and `weights`.
+</details>
 
-`Collections.sort(list,Comparator.comparing(Term::getWeight).reversed())`
+<details>
+<summary>Expand for details on the initialize method</summary>
 
-The implementation of `topMatches` can then be done in about five lines of code or fewer: if the prefix is in the map, get the corresponding value and return a sublist of the first `k` entries. Here's code that can help:
+For each `Term` in `initialize`, use the first `MAX_PREFIX` substrings as a key in the map the class maintains and uses. For each prefix you'll store the `Term` objects with that prefix in an `ArrayList` that is the corresponding value for the prefix in the map.
+
+***After*** all keys and values have been entered into the map, you'll write code to sort every value in the map, that is each `ArrayList` corresponding to each prefix. You must use a `Comparator.comparing(Term::getWeight).reversed()` object to sort so that the list is maintained sorted from high to low by weight, e.g., see below, and sort using this idea for each list associated with a key in the map.
+
+```java
+Collections.sort(list, Comparator.comparing(Term::getWeight).reversed())`
+```
+
+</details>
+
+<details>
+<summary>Expand for details on the topMatches method</summary>
+
+The implementation of `topMatches` can then be done in about five lines of code or fewer. First, check that the `prefix` parameter has at most `MAX_PREFIX` characters, otherwise shorten it by truncating the trailing characters to `MAX_PREFIX` length. 
+
+Then, if `prefix` is in the map, get the corresponding value (a `List` of `Term` objects) and return a sublist of the first `k` entries (or all of the entries if there are fewer than `k`). Here's code that can help:
 
 ```java
 List<Term> all = myMap.get(prefix);
 List<Term> list = all.subList(0, Math.min(k, all.size()));
 ```
 
-***All prefixes passed to `topMatches` should be shortened to `MAX_PREFIX` characters if necessary.***
+</details>
 
-You'll also need to implement the required `sizeInBytes` method. This should account for every `Term` object and every String/key in the map. Use the implementations of `sizeInBytes` in the other `Autocomplete` classes as a model. Each string stored contributes `BYTES_PER_CHAR*length` to the bytes need. Each double stored contributes `BYTES_PER_DOUBLE`. You'll account for every `Term` and for every key in the map -- these are all strings.
+<details>
+<summary>Expand for details on the sizeInBytes method</summary>
+
+You'll also need to implement the required `sizeInBytes` method. This method should return an estimate of the amount of memory (in bytes) necessary to store all of the keys and values in the `HashMap`. This can be computed once the first time `sizeInBytes` is called (that is, when `mySize == 0`) and stored in the instance variable `mySize`; on subsequent calls it can just return `mySize`. You can see similar examples in the `sizeInBytes` methods of `BruteAutocomplete` and `BinarySearchAutocomplete`.
+
+Your method should account for every `Term` object and every String/key in the map. Use the implementations of `sizeInBytes` in the other `Autocomplete` classes as a model. Each string stored contributes `BYTES_PER_CHAR * length` to the bytes need. Each double stored contributes `BYTES_PER_DOUBLE`. You'll account for every `Term` stored in one of the lists in the map (each consisting of a String and a double) as well as every key (Strings) in the map.
 
 </details>
 
