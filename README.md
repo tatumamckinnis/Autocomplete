@@ -146,7 +146,7 @@ public static <T> int binarySearch(List<T> list, T target,
 }
 ```
 
-This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. **Your task is to adapt this approach so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.** 
+This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. **Your task is to adapt this approach (given in the starter code) so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.** 
 
 At a high level, note that binary search is efficient because at each iteration of the `while` loop it reduces the effective search range (`high`-`low`) by a multiplicative factor of 2, leading to the **O(log *N*)** performance. It is also correct because of the following *loop invariant* - at the start of the loop, the target is always at an index between `low` and `high` (if it is in the list). Your algorithm will need to do this as well. Hoewver, the example code shown above `return`s as soon as it finds a match. You will need to change this so that your algorithm keeps searching to find the first or last match respectively.
 
@@ -262,9 +262,29 @@ For each `Term` in `initialize`, use the first `MAX_PREFIX` substrings as a key 
 
 ***After*** all keys and values have been entered into the map, you'll write code to sort every value in the map, that is each `ArrayList` corresponding to each prefix. You must use a `Comparator.comparing(Term::getWeight).reversed()` object to sort so that the list is maintained sorted from high to low by weight, e.g., see below, and sort using this idea for each list associated with a key in the map.
 
+While it is not required, we highly recommend updating mySize as you're creating the map. mySize is a rough estimate of the number of bytes required to create the HashMap (both the String keys and the Term values in the HashMap). For each string you create, you'll need to add on `BYTES_PER_CHAR * length` to the number of bytes needed. For each term you store, each string stored contributes `BYTES_PER_CHAR * length` and each double stored contributes `BYTES_PER_DOUBLE`. If you follow these instructions, then you can ignore the sizeInBytes instructions and just return `mySize`.
+
 ```java
 Collections.sort(list, Comparator.comparing(Term::getWeight).reversed())`
 ```
+
+**_Be sure that you include the empty string as a substring!_** As an example, if I initialize HashListAutocomplete with one Term ("hippopotamus", 40), then my HashMap should be 
+
+|Prefix|Term Objects|
+| --   |    ----    |
+|""| ("hippopotamus", 40)|
+|"h"| ("hippopotamus", 40)|
+|"hi"| ("hippopotamus", 40)|
+|"hip"| ("hippopotamus", 40)|
+|"hipp"| ("hippopotamus", 40)|
+|"hippo"| ("hippopotamus", 40)|
+|"hippop"| ("hippopotamus", 40)|
+|"hippopo"| ("hippopotamus", 40)|
+|"hippopot"| ("hippopotamus", 40)|
+|"hippopota"| ("hippopotamus", 40)|
+|"hippopotam"| ("hippopotamus", 40)|
+
+We stop at "hippopotam" since we take prefixes up to `MAX_PREFIX` length.
 
 </details>
 
@@ -273,7 +293,7 @@ Collections.sort(list, Comparator.comparing(Term::getWeight).reversed())`
 
 The implementation of `topMatches` can then be done in about five lines of code or fewer. First, check that the `prefix` parameter has at most `MAX_PREFIX` characters, otherwise shorten it by truncating the trailing characters to `MAX_PREFIX` length. 
 
-Then, if `prefix` is in the map, get the corresponding value (a `List` of `Term` objects) and return a sublist of the first `k` entries (or all of the entries if there are fewer than `k`). Here's code that can help:
+Then, if `prefix` is in the map, get the corresponding value (a `List` of `Term` objects) and return a sublist of the first `k` entries (or all of the entries if there are fewer than `k`). Otherwise, you should return an empty list. Here's code that can help:
 
 ```java
 List<Term> all = myMap.get(prefix);
