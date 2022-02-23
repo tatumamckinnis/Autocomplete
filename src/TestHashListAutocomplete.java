@@ -27,6 +27,10 @@ public class TestHashListAutocomplete {
         //note that strings may be shorter than term length. You can consider this to be the secret test in a way.
     }
 
+    /**
+     * Tests that constructor initializes prefix properly given test words and weights
+     * Should have every possible prefix up until number of characters specified
+     */
     @Test
     public void testInitalizeKeys() {
         ArrayList<String> solution = new ArrayList<>(Arrays.asList(new String[] {
@@ -46,6 +50,9 @@ public class TestHashListAutocomplete {
         }
     }
 
+    /**
+     * Tests that constructor initializes Term values properly for the correct prefixes 
+     */
     @Test
     public void testInitalizeValues() {
         // checks that Term values for the map were sorted correctly
@@ -61,6 +68,9 @@ public class TestHashListAutocomplete {
         }
     }
 
+    /**
+     * Tests that code returns weightiest top matches when k > number of entries
+     */
     @Test
     public void testTopMatches() {
         //top matches in bob for "ap" should be "apricot", "apple"
@@ -70,6 +80,9 @@ public class TestHashListAutocomplete {
             + "did not return the correct result for a simple case.");
     }
 
+    /**
+     * Tests that code returns weightiest top matches when k < number of entries
+     */
     @Test
     public void testTopMatchesK() {
         //top matches in bob for "ap", 1 should be "apricot", "apple"
@@ -79,12 +92,19 @@ public class TestHashListAutocomplete {
             + " did not return the correct result for a simple case.");
     }
 
+    /**
+     * Tests that code returns correct sizeInBytes
+     * Should return correct estimate of memory to store all keys and values of myMap
+     */
     @Test
     public void testSizeInBytes() {
         assertEquals(312, bob.sizeInBytes(), "Your HashListAutocomplete did not"
             + "yield the proper size in bytes for a simple case");
     }
 
+    /**
+     * Tests that constructor throws correct exceptions for different bad input scenarios
+     */
     @Test
     public void testExceptions() {
       assertThrows(NullPointerException.class, ()-> new HashListAutocomplete(null, null));
@@ -95,11 +115,17 @@ public class TestHashListAutocomplete {
         assertThrows(IllegalArgumentException.class, ()->new HashListAutocomplete(terms, weights2));
     }
 
+    /**
+     * Tests that code handles nonexistent prefix queries correctly
+    */
     @Test
     public void testNonexistentPrefix(){
         assertTrue(bob.topMatches("banana", 3).size() == 0, "Your HashListAutocomplete gave a non-empty list for a prefix that shouldn't be in the map!");
     }
 
+    /**
+     * Tests that no extra keys are given
+     */
     @Test
     public void testGoUpToMaxPrefix() {
         HashListAutocomplete woo = new HashListAutocomplete(new String[]{"bananabanana", "banana"}, new double[]{2.0, 2.0});
