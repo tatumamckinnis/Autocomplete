@@ -51,7 +51,7 @@ public class BinarySearchLibrary {
 		int high = list.size() - 1;
 		while (low <= high) {
 			int mid = (low + high) / 2; 
-			//NOTE: This choice of mid will test earlier elements in the list
+			//NOTE: This choice of mid will check the midpoint of the list rounded DOWN
 			//which is handy since we're looking for the first value at
 			//which target shows - WE RECOMMEND THAT YOU DON'T CHANGE THIS!
 			T midval = list.get(mid);
@@ -90,7 +90,7 @@ public class BinarySearchLibrary {
 		int high = list.size() - 1;
 		while (low <= high) {
 			int mid = (low + high + 1) / 2; 
-			//NOTE: This choice of mid will test later elements in the list
+			//NOTE: This choice of mid will check the midpoint of the list rounded UP
 			//which is handy since we're looking for the last value at
 			//which target shows - WE RECOMMEND THAT YOU DON'T CHANGE THIS!
 			T midval = list.get(mid);
