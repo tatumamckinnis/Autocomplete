@@ -99,16 +99,7 @@ public class BinarySearchAutocomplete implements Autocompletor {
 	
 	@Override
 	public List<Term> topMatches(String prefix, int k) {
-		Term dummy = new Term(prefix,0);
-		PrefixComparator comp = PrefixComparator.getComparator(prefix.length());
-		int first = firstIndexOf(myTerms, dummy, comp);
-		int last = lastIndexOf(myTerms, dummy, comp);
-
-		if (first == -1) {               // prefix not found
-			return new ArrayList<>();
-		}
-
-		// write code here for P5 assignment
+		// TODO: copy code in from BruteAutocomplete.topMatches.
 
 		return null;
 	

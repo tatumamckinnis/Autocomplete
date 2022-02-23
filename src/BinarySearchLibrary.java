@@ -4,81 +4,109 @@ import java.util.*;
  * Facilitates using fast binary search with
  * a Comparator. The methods firstIndex and lastIndex
  * run in time ceiling(1 + log(n)) where n is size of list.
+ * 
  * @author ola for framework
  * @author 201 student implementing firstIndex and lastIndex
  *
  */
 public class BinarySearchLibrary {
-	
+
 	/**
 	 * Return the index of the first object (smallest index)
 	 * o in parameter "equal" to target, that is
 	 * the first object o such that comp.compare(o,target) == 0
 	 *
-	 * @param list is list of Items being searched
+	 * @param list   is list of Items being searched
 	 * @param target is Item searched for
-	 * @param comp how Items are compared for binary search
+	 * @param comp   how Items are compared for binary search
 	 * @return smallest index k such that comp.compare(list.get(k),target) == 0
 	 */
-	public static <T>
-	    int firstIndexSlow(List<T> list,
-	    		           T target, Comparator<T> comp) {
-		int index = Collections.binarySearch(list, target,comp);
-		
-		if (index < 0) return index;
-		
-		while (0 <= index && comp.compare(list.get(index),target) == 0) {
+	public static <T> int firstIndexSlow(List<T> list,
+			T target, Comparator<T> comp) {
+		int index = Collections.binarySearch(list, target, comp);
+
+		if (index < 0)
+			return index;
+
+		while (0 <= index && comp.compare(list.get(index), target) == 0) {
 			index -= 1;
 		}
-		return index+1;
+		return index + 1;
 	}
-	
+
 	/**
 	 * Return smallest index of target in list using comp
 	 * Guaranteed to make ceiling(1 + log(list.size())) comparisons
-	 * @param list is list of Items being searched
+	 * 
+	 * @param list   is list of Items being searched
 	 * @param target is Item searched for
-	 * @param comp how Items are compared for binary search
+	 * @param comp   how Items are compared for binary search
 	 * @return smallest index k such that comp.compare(list.get(k),target) == 0
-	 * Return -1 if there is no such object in list.               
+	 *         Return -1 if there is no such object in list.
 	 */
-	public static <T>
-    	int firstIndex(List<T> list,
-	               	   T target, Comparator<T> comp) {
-		
-		int low = -1;
-		int high = list.size()-1;
-		
-		// (low,high] contains target
-		// TODO: write method
-		
-		return -1;
+	public static <T> int firstIndex(List<T> list,
+			T target, Comparator<T> comp) {
+
+		int low = 0;
+		int high = list.size() - 1;
+		while (low <= high) {
+			int mid = (low + high) / 2; 
+			//NOTE: This choice of mid will test earlier elements in the list
+			//which is handy since we're looking for the first value at
+			//which target shows - WE RECOMMEND THAT YOU DON'T CHANGE THIS!
+			T midval = list.get(mid);
+			int cmp = comp.compare(midval, target);
+
+			if (cmp < 0)
+				low = mid + 1;
+			else if (cmp > 0)
+				high = mid - 1;
+			else
+				return mid; // target found
+		}
+		return -1; // target not found
+
+		//TODO: change this code to return the first index at which comp.compare(list.get(low/high), target) == 0.
+
 	}
 
-	 /**                                                                                          
-     * Return the index of the last object (largest index)
+	/**
+	 * Return the index of the last object (largest index)
 	 * o in parameter "equal" to target, that is
-     * the last object o such that comp.compare(o,target) == 0.
-     * Guaranteed to make ceiling(1 + log(list.size())) comparisons
-     *
-     * @param list is the list of objects being searched                                         
-     * @param target is the object being searched for                                            
-     * @param comp is how comparisons are made                                                   
-     * @return index i such that comp.compare(list.get(i),target) == 0                           
-     * and there is no index > i such that this is true. Return -1                               
-     * if there is no such object in list.                                                       
-     */
-	public static <T>
-	int lastIndex(List<T> list, 
-               	  T target, Comparator<T> comp) {
-		
+	 * the last object o such that comp.compare(o,target) == 0.
+	 * Guaranteed to make ceiling(1 + log(list.size())) comparisons
+	 *
+	 * @param list   is the list of objects being searched
+	 * @param target is the object being searched for
+	 * @param comp   is how comparisons are made
+	 * @return index i such that comp.compare(list.get(i),target) == 0
+	 *         and there is no index > i such that this is true. Return -1
+	 *         if there is no such object in list.
+	 */
+	public static <T> int lastIndex(List<T> list,
+			T target, Comparator<T> comp) {
+
 		int low = 0;
-		int high = list.size();
-		
-		// target in [low,high)
-		// TODO: write  method
-		
-		return -1;
+		int high = list.size() - 1;
+		while (low <= high) {
+			int mid = (low + high + 1) / 2; 
+			//NOTE: This choice of mid will test later elements in the list
+			//which is handy since we're looking for the last value at
+			//which target shows - WE RECOMMEND THAT YOU DON'T CHANGE THIS!
+			T midval = list.get(mid);
+			int cmp = comp.compare(midval, target);
+
+			if (cmp < 0)
+				low = mid + 1;
+			else if (cmp > 0)
+				high = mid - 1;
+			else
+				return mid; // target found
+		}
+		return -1; // target not found
+
+		//TODO: change this code to return the last index at which comp.compare(list.get(low/high), target) == 0.
+
 	}
-	
+
 }
