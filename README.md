@@ -153,7 +153,7 @@ At a high level, note that binary search is efficient because at each iteration 
 We recommend trying to solve this problem by adding a `foundAt` variable (as shown in the starter code) and maintaining the following **loop invariant** that should be true at the start of every iteration of the `while` loop. Let [`low`, `high`] denote the integer values from `low` to `high`, inclusive. The invariant is:
 
 1. `foundAt` should be the *least* (for `firstIndex`) or *greatest* (for `lastIndex`) index outside of [`low`, `high`] containting target (or -1 if there are none). (Intuitively, this keeps track of the least or greatest valid index your algorithm has found so far).
-2. All indices *less than* `foundAt` (for `firstIndex`) or *greater than* `foundAt` (for `lastIndex`) should be inside of [`low`, `high`]. (Intuitively, this means that any lesser or greater valid index than your algorithm has found so far should be inside the future search space).
+2. All indices containing target *less than* `foundAt` (for `firstIndex`) or *greater than* `foundAt` (for `lastIndex`) should be inside of [`low`, `high`]. (Intuitively, this means that any lesser or greater valid index than your algorithm has found so far should be inside the future search space).
 
 This invariant is initially established by setting `low = 0`, `high = list.size()-1`, and `foundAt = -1`. If it is maintained until `low > high`, then we can simply `return foundAt` to complete the method.
 
