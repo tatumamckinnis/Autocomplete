@@ -49,25 +49,13 @@ public class BinarySearchLibrary {
 
 		int low = 0;
 		int high = list.size() - 1;
+		int foundAt = -1; // return -1 if not found
 		while (low <= high) {
-			int mid = (low + high) / 2; 
-			//NOTE: This choice of mid will check the midpoint of the list rounded DOWN
-			//which is handy since we're looking for the first value at
-			//which target shows - WE RECOMMEND THAT YOU DON'T CHANGE THIS!
-			T midval = list.get(mid);
-			int cmp = comp.compare(midval, target);
-
-			if (cmp < 0)
-				low = mid + 1;
-			else if (cmp > 0)
-				high = mid - 1;
-			else
-				return mid; // target found
+			// TODO: Complete code here. Consider the following invariant:
+			// foundAt should be least index that matches target outside of [low, high] (-1 if none)
+			// indices less than foundAt that match target should be in [low, high]
 		}
-		return -1; // target not found
-
-		//TODO: change this code to return the first index at which comp.compare(list.get(low/high), target) == 0.
-
+		return foundAt;
 	}
 
 	/**
@@ -88,25 +76,13 @@ public class BinarySearchLibrary {
 
 		int low = 0;
 		int high = list.size() - 1;
+		int foundAt = -1; // return -1 if not found
 		while (low <= high) {
-			int mid = (low + high + 1) / 2; 
-			//NOTE: This choice of mid will check the midpoint of the list rounded UP
-			//which is handy since we're looking for the last value at
-			//which target shows - WE RECOMMEND THAT YOU DON'T CHANGE THIS!
-			T midval = list.get(mid);
-			int cmp = comp.compare(midval, target);
-
-			if (cmp < 0)
-				low = mid + 1;
-			else if (cmp > 0)
-				high = mid - 1;
-			else
-				return mid; // target found
+			// TODO: Complete code here. Consider the following invariant:
+			// foundAt should be *greatest* index that matches target outside of [low, high], (-1 if none)
+			// indices greater than foundAt that match target should be in [low, high]
 		}
-		return -1; // target not found
-
-		//TODO: change this code to return the last index at which comp.compare(list.get(low/high), target) == 0.
-
+		return foundAt;
 	}
 
 }
