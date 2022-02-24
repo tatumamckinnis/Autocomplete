@@ -28,7 +28,7 @@ public class TestHashListAutocomplete {
     }
 
     /**
-     * Tests that constructor initializes prefix properly given test words and weights
+     * Tests that the constructor initializes prefixes properly given test words and weights
      * Should have every possible prefix up until number of characters specified
      */
     @Test
@@ -124,7 +124,8 @@ public class TestHashListAutocomplete {
     }
 
     /**
-     * Tests that no extra keys are given
+     * Tests that no extra keys are returned
+     * Additionally ensures that no prefixes longer than supposed to are returned
      */
     @Test
     public void testGoUpToMaxPrefix() {
