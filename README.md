@@ -8,7 +8,7 @@ This is the directions document for Project P5 Autocomplete in CompSci 201 at Du
 - [Part 2: Implement the compare method in PrefixComparator](#part-2-implement-the-compare-method-in-prefixcomparator)
 - [Part 3: Implement BinarySearchLibrary](#part-3-implement-binarysearchlibrary)
 - [Part 4: Finish Implementing topMatches in BinarySearchAutocomplete](#part-4-finish-implementing-topmatches-in-binarysearchautocomplete)
-- [Part 5: Create and implement HashListAutocomplete](#part-5-create-and-implement-hashlistautocomplete)
+- [Part 5: Implement HashListAutocomplete](#part-5-implement-hashlistautocomplete)
 - [Benchmarking and Analysis](#benchmarking-and-analysis)
 - [Submitting, Reflect, and Grading](#submitting-reflect-and-grading)
 
@@ -227,11 +227,11 @@ final static String AUTOCOMPLETOR_CLASS_NAME = BRUTE_AUTOCOMPLETE;
 //final static String AUTOCOMPLETOR_CLASS_NAME = HASHLIST_AUTOCOMPLETE;
 ```
 
-## Part 5: Create and implement `HashListAutocomplete`
+## Part 5: Implement `HashListAutocomplete`
 
-In this part, you will create one more implementation of the `Autocompletor` interface. Unlike `BruteAutocomplete` and `BinarySearchAutocomplete`, this third implementation will be based on the use of a `HashMap` instead of the binary search algorithm. This class will provide an `O(1)` implementation of `topMatches` --- with a tradeoff of requiring more memory.
+In this part, you will provide one more implementation of the `Autocompletor` interface, this time from scratch. Unlike `BruteAutocomplete` and `BinarySearchAutocomplete`, this third implementation will be based on the use of a `HashMap` instead of the binary search algorithm. This class will provide an `O(1)` implementation of `topMatches` --- with a tradeoff of requiring more memory.
 
-Create a class named `HashListAutocomplete` in a new `HashListAutocomplete.java` file that `implements` the `Autocompletor` interface. The declaration of the class and the instance variables you will need are shown in the code below. 
+A skeleton of `HashListAutocomplete` can be found in the `HashListAutocomplete.java` file that `implements` the `Autocompletor` interface. The declaration of the class and the instance variables you will need to add are shown in the code below. 
 
 ```java
 public class HashListAutocomplete implements Autocompletor {
@@ -242,7 +242,7 @@ public class HashListAutocomplete implements Autocompletor {
 }
 ```
 
-VS Code should give you the option to add stub methods for all those required to implement the `Autocompletor` interface, or you can add them manually. You will need to implement a constructor, `initialize`, `topMatches`, and `sizeInBytes` (details below).
+There are four methods you will need to implement, stubs of which are provided in the starter code: `initialize`, `topMatches`, and `sizeInBytes` (details below).
 
 The class should maintain a `HashMap` of _every possible prefix_ (for each term) (up to the number of characters specified by a constant `MAX_PREFIX` that you should set to 10 as shown. The key in the map is a prefix/substring. The value for each prefix key is a weight-sorted list of `Term` objects that share that prefix. The diagram below shows part of such a `HashMap`. Three prefixes are shown---the corresponding values are shown as a weight-sorted list of `Term` objects.
 
