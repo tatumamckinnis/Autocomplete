@@ -1,6 +1,6 @@
-# Project 5: Autocomplete
+# Project 4: Autocomplete
 
-This is the directions document for Project P5 Autocomplete in CompSci 201 at Duke University, Spring 2022. Please follow the directions carefully while you complete the project. Please refer to the directions at https://coursework.cs.duke.edu/201spring22/p5-autocomplete rather than any forks or local copies in the event that any changes are made to the document.
+This is the directions document for Project 4 Autocomplete in CompSci 201 at Duke University, Fall 2022. [This document details the workflow](hhttps://coursework.cs.duke.edu/cs-201-fall-22/resources-201/-/blob/main/projectWorkflow.md) for downloading the starter code for the project, updating your code on coursework using Git, and ultimately submitting to Gradescope for autograding.
 
 ## Outline 
 - [Project Introduction](#project-introduction)
@@ -14,14 +14,14 @@ This is the directions document for Project P5 Autocomplete in CompSci 201 at Du
 
 ## Project Introduction	
 
-Autocomplete is an algorithm used in many modern software applications. In all of these applications, the user types text and the application suggests possible completions for that text as shown in the example images below taken from google search (on the left in March 2019 and on the right on  October 9, 2020).
+Autocomplete is an algorithm used in many modern software applications. In all of these applications, the user types text and the application suggests possible completions for that text as shown in the example images below taken from google search.
 
 <details>
 <summary>Expand for examples</summary>
-
+The left/first was taken in March 2019, the right/second on October 9, 2020)
 <div align="center">
-  <img width="384" height="344 "src="p5-figures/googleSearch.png">
-  <img width="384" height="345" src="p5-figures/googleSearch2.png">
+  <img width="384" height="344 "src="p4-figures/googleSearch.png">
+  <img width="384" height="345" src="p4-figures/googleSearch2.png">
 </div>
 
 </details>
@@ -42,7 +42,7 @@ The article linked below describes one group's recent analysis of different data
 - https://medium.com/@prefixyteam/how-we-built-prefixy-a-scalable-prefix-search-service-for-powering-autocomplete-c20f98e2eff1
 
 ### Acknowledgements
-The assignment was developed by Kevin Wayne and Matthew Drabick at Princeton University for their Computer Science 226 class. Former head CompSci 201 UTAs, Arun Ganesh (Trinity '17) and Austin Lu (Trinity '15) adapted the assignment for Duke with help from Jeff Forbes. Josh Hug updated the assignment and provided more of the testing framework. The current version is the result of simplification done in Fall 2018 and then modified again in Spring 2019 based on the article above and experience from previous semesters. The version in Fall 2020 reflects updates to the java.util.Comparator API, now updated for academic year 2021-2022.
+The assignment was developed by Kevin Wayne and Matthew Drabick at Princeton University for their Computer Science 226 class. Former head CompSci 201 UTAs, Arun Ganesh (Trinity '17) and Austin Lu (Trinity '15) adapted the assignment for Duke with help from Jeff Forbes. Josh Hug updated the assignment and provided more of the testing framework.
 
 </details>
 
@@ -57,13 +57,6 @@ Here's a high-level view of the assignment. This is enough information to know w
 5. Create and implement a new class `HashListAutocomplete` that implements interface `Autocompletor`. Test by running `AutocompleteMain` using `HashListAutocomplete`.
 6. Run benchmarks and answer analysis questions. Submit code, analysis, and complete reflect form.
 
-### Starter Code and Using Git
-You must have installed all software (Java, Git, VS Code) before you can complete the project.You can find the [directions for installation here](https://coursework.cs.duke.edu/201-public-documentation/resources-201/-/blob/main/installingSoftware.md).
-
-We'll be using Git and the installation of GitLab at [coursework.cs.duke.edu](https://coursework.cs.duke.edu). All code for classwork will be kept here. Git is software used for version control, and GitLab is an online repository to store code in the cloud using Git.
-
-**[This document details the workflow](https://coursework.cs.duke.edu/201-public-documentation/resources-201/-/blob/main/projectWorkflow.md) for downloading the starter code for the project, updating your code on coursework using Git, and ultimately submitting to Gradescope for autograding.** We recommend that you read and follow the directions carefully while working on a project! While coding, we recommend that you periodically (perhaps when completing a method or small section) push your changes as explained in Section 5.
-
 
 ## Part 1: Run Autocomplete Main
 
@@ -74,7 +67,7 @@ Once you select a file, the GUI will prompt you to enter a term. As you type, yo
 <details>
 <summary>Expand for example of program running</summary>
 <div align="center">
-  <img src="p5-figures/astrachanSearch.png">
+  <img src="p4-figures/astrachanSearch.png">
 </div>
 </details>
 
@@ -369,7 +362,7 @@ Push your code to Git. Do this often. Once you have run and tested your complete
 
 1. Submit your code on gradescope to the autograder.
 2. Submit a PDF to Gradescope in the separate Analysis assignment. Be sure to mark pages for the questions as explained in the [gradescope documentation here](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#submitting_a_pdf).
-3. Complete the [reflect form linked here](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTErNjWEU70pGg_ytfEVEPi5UNUpXRFdPUlBIMTE5Uk1HUDlPNUFWS1ZDMi4u).
+3. Complete the brief [reflect form linked here](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTErNjWEU70pGg_ytfEVEPi5UQlg4RkxEV0ZJTU1OQlNUWFhPRTVIVlNCVi4u).
 
 For this project, the grading will be:
 
@@ -380,4 +373,4 @@ For this project, the grading will be:
 | 6 | Code for BinarySearchAutocomplete.topMatches |
 | 9 | Code for HashListAutocomplete |
 | 1 | API |
-| 8 | Analysis and reflect |
+| 8 | Analysis |
