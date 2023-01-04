@@ -10,7 +10,7 @@ This is the directions document for Project 4 Autocomplete in CompSci 201 at Duk
 - [Part 4: Finish Implementing topMatches in BinarySearchAutocomplete](#part-4-finish-implementing-topmatches-in-binarysearchautocomplete)
 - [Part 5: Implement HashListAutocomplete](#part-5-implement-hashlistautocomplete)
 - [Benchmarking and Analysis](#benchmarking-and-analysis)
-- [Submitting, Reflect, and Grading](#submitting-reflect-and-grading)
+- [Submitting and Grading](#submitting-and-grading)
 
 ## Project Introduction	
 
@@ -356,7 +356,7 @@ b       676     50      0.00016033      0.00011954      0.00000292
 **Question 4.** Briefly explain why `HashListAutocomplete` is much more efficient in terms of the empirical runtime of `topMatches`, but uses more memory than the other `Autocomplete` implementations.
 
 
-## Submitting, Reflect, and Grading 
+## Submitting and Grading 
 
 Push your code to Git. Do this often. Once you have run and tested your completed program locally:
 
