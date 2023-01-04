@@ -1,6 +1,6 @@
 # Project 4: Autocomplete
 
-This is the directions document for Project 4 Autocomplete in CompSci 201 at Duke University, Fall 2022. [This document details the workflow](hhttps://coursework.cs.duke.edu/cs-201-fall-22/resources-201/-/blob/main/projectWorkflow.md) for downloading the starter code for the project, updating your code on coursework using Git, and ultimately submitting to Gradescope for autograding.
+This is the directions document for Project 4 Autocomplete in CompSci 201 at Duke University, Spring 2023. [This document details the workflow](https://coursework.cs.duke.edu/cs-201-spring-23/resources-201/-/blob/main/projectWorkflow.md) for downloading the starter code for the project, updating your code on coursework using Git, and ultimately submitting to Gradescope for autograding.
 
 ## Outline 
 - [Project Introduction](#project-introduction)
@@ -362,7 +362,6 @@ Push your code to Git. Do this often. Once you have run and tested your complete
 
 1. Submit your code on gradescope to the autograder.
 2. Submit a PDF to Gradescope in the separate Analysis assignment. Be sure to mark pages for the questions as explained in the [gradescope documentation here](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#submitting_a_pdf).
-3. Complete the brief [reflect form linked here](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTErNjWEU70pGg_ytfEVEPi5UQlg4RkxEV0ZJTU1OQlNUWFhPRTVIVlNCVi4u).
 
 For this project, the grading will be:
 
