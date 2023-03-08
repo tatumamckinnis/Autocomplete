@@ -11,6 +11,9 @@ public class TestBinarySearchLibrary {
 
 	List<String> myList;
 	
+	/**
+     * Setup for JUnit tests on BinarySearchLibrary
+     */
 	@BeforeEach
 	public void setup () {
 		String[] ss = {
@@ -23,6 +26,9 @@ public class TestBinarySearchLibrary {
 		myList = Arrays.asList(ss);
 	}
 
+	/**
+     * Tests correctness of firstindex returned for target element
+     */
 	@Test
 	public void testFirstIndex() {
 		String[] keys = {"apple","cherry","lemon","orange","zoo"};
@@ -39,6 +45,9 @@ public class TestBinarySearchLibrary {
 		}
 	}
 	
+	/**
+     * Tests correctness of lastindex returned for target element
+     */
 	@Test
 	public void testLastIndex() {
 		String[] keys = {"apple","cherry","lemon","orange","zoo"};
