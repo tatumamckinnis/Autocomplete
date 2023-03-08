@@ -362,14 +362,3 @@ Push your code to Git. Do this often. Once you have run and tested your complete
 
 1. Submit your code on gradescope to the autograder.
 2. Submit a PDF to Gradescope in the separate Analysis assignment. Be sure to mark pages for the questions as explained in the [gradescope documentation here](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#submitting_a_pdf).
-
-For this project, the grading will be:
-
-| Points | Grading Criteria |
-| ------ | ------ |
-| 4 | Code Comparator |
-| 8 | Code for BinarySearchLibrary firstIndex and lastIndex |
-| 6 | Code for BinarySearchAutocomplete.topMatches |
-| 9 | Code for HashListAutocomplete |
-| 1 | API |
-| 8 | Analysis |
