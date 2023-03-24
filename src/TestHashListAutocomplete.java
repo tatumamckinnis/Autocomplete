@@ -95,11 +95,11 @@ public class TestHashListAutocomplete {
     /**
      * Tests that code returns correct sizeInBytes
      * Should return correct estimate of memory to store all keys and values of myMap
-     * Accepts both sizeInBytes approaches outlined in writeup
+     * Accepts both sizeInBytes approaches implied in writeup and accepted on Gradescope
      */
     @Test
     public void testSizeInBytes() {
-        assertTrue((bob.sizeInBytes() == 302 || bob.sizeInBytes() == 950), "Your HashListAutocomplete did not"
+        assertTrue((bob.sizeInBytes() == 312 || bob.sizeInBytes() == 950), "Your HashListAutocomplete did not"
             + "yield the proper size in bytes for a simple case");
     }
 
