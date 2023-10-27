@@ -86,7 +86,7 @@ public static <T> int binarySearch(List<T> list, T target,
 }
 ```
 
-This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. **Your task is to adapt this approach (outlined in the starter code) so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.** 
+This method meets the *performance* requirement and returns an index `i` such that `comp.compare(list.get(i), target)==0`. However, it does *not* guarantee to return the first or last such index `i`. **Your task is to adapt this approach (outlined in the explanation below and in code you get with the project (to copy)) so that `firstIndex` and `lastIndex` return the first and last such indices respectively, while maintaining the same performance guarantee.** 
 
 At a high level, note that binary search is efficient because at each iteration of the `while` loop it reduces the effective search range (`high`-`low`) by a multiplicative factor of 2, leading to the **O(log *N*)** performance. It is also correct because of the following *loop invariant* - at the start of the loop, the target is always at an index between `low` and `high` (if it is in the list). Your algorithm will need to do this as well. However, the example code shown above `return`s as soon as it finds a match. You will need to change this so that your algorithm keeps searching to find the first or last match respectively.
 
@@ -135,7 +135,7 @@ the value at index `high` in the code for `firstIndex`.
 
 You're given two classes to help verify that your methods are correct and meet performance requirements. The JUnit tests in `TestBinarySearchLibrary` can help you verify that your methods return the correct values. The output of running `BinaryBenchmark` can help verify both ***correctness and performance requirements.*** The output using a correct `BinarySearchLibrary` class is shown below when running `BinaryBenchmark` (note,the code is actually in the `firstMatch` method you'll copy to `BinarySearchLibrary`). The values in both `index` columns should be the same: the location of the first occurrence of the target `banana`. The `scomps` column is the number of comparisons made by the slow implementation `firstIndexSlow`. The `fcomps` column is the number of comparisons made by code you'll move to `firstIndex`. You can modify to test for `lastIndex` to see if it's similar.
 ```
-   size	  sdex  scomps fdex fcomps
+    size. sdex  scomps fdex fcomps
     1024	0	644	    0	13
     2048	0	1297	0	14
     4096	0	2578	0	15
