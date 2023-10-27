@@ -43,12 +43,14 @@ public class BruteAutocomplete implements Autocompletor {
 			if (!t.getWord().startsWith(prefix)) {
 				continue; // don't process if doesn't begin with prefix
 			}
+			
 			if (pq.size() < k) {
 				pq.add(t);
 			} else if (pq.peek().getWeight() < t.getWeight()) {
 				pq.remove();
 				pq.add(t);
 			}
+			
 		}
 		// after loop, pq holds *at most* k Terms and
 		// these are terms that are the "heaviest" based on code above
