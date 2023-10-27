@@ -77,7 +77,7 @@ public class BinaryBenchmark {
         if (high < 0 || high >= list.size()){
             return -1;
         }
-        if (comp.compare(target,list.get(high)) == 0){
+        if (list.get(high).compareTo(target) == 0){
             return high;
         }
         return -1;
