@@ -116,4 +116,24 @@ Push your code to Git. Do this often. Once you have run and tested your complete
 1. Submit your code on gradescope to the autograder.
 2. Submit a PDF to Gradescope in the separate Analysis assignment. Be sure to mark pages for the questions as explained in the [gradescope documentation here](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#submitting_a_pdf).
 
+### Grading
+
+| Points | Grading Criteria |
+| ------ | ------ |
+| 4 | Code Comparator|
+| 8 |  Code for BinarySearchLibrary firstIndex and lastIndex |
+| 6 | Code for BinarySearchAutocomplete.topMatches |
+| 9 | Code for HashListAutocomplete |
+| 1 | API |
+| 8 | Analysis code and questions answered. UTAs will grade and comment on this |
+
+
+We will map total points you earn to scores as follows. We will record the letter grade as your grade for this assignment. For example, a score in the range of 31-26 will range from A- to A+.
+
+31-36:  A<br>
+25-30:  B<br>
+19-24:  C<br>
+12-18:  D
+
+
 
