@@ -61,7 +61,7 @@ In this part, you will provide one more implementation of the `Autocompletor` in
 A skeleton of `HashListAutocomplete` can be found in the `HashListAutocomplete.java` file that `implements` the `Autocompletor` interface. **For details about the class and code you write see [the details document](docs/details.md).**
 
 
-## Benchmarking and Analysis
+## Analysis Questions and Benchmarking
 
 You'll submit the analysis as a PDF separate from the code in Gradescope. 
 
@@ -69,7 +69,7 @@ You'll submit the analysis as a PDF separate from the code in Gradescope.
 
 Run `BenchmarkForAutocomplete` three times, once for each of the files in the Benchmark program: `threeletterwords.txt`, `fourletterwords.txt`, and `alexa.txt`. You can change which file is being used inside of the `doMark` method. **Copy and paste all three results into your analysis**. An example and detailed information about the output is described in the expandable section below.
 
-### Benchmarking Details
+#### Benchmarking Details
 
 On Professor Astachan's laptop, the first few lines are what's shown below for `data/threeletterwords.txt` (in addition, the `sizeInBytes` for the implementations are shown at the bottom). These numbers are for a file of every three letter word "aaa, "aab", … "zzy", "zzz", not actual words, but 3-character strings. All times are listed in seconds.
 
