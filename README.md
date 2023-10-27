@@ -32,13 +32,13 @@ By default, `AutocompleteMain` is using `BruteAutocomplete` to find the correct 
 
 ## Part 2: Implement the `compare` method in `PrefixComparator`
 
-A `PrefixComparator` object is obtained by calling `PrefixComparator.getComparator` with an integer argument `r`, the size of the prefix for comparison purposes. The value is stored in the instance variable `myPrefixSize` as you'll see in the code. This class is used in `BinarySearchAutocomplete`, but not in `BruteAutocomplete`. See the [details document](docs/details.md) for details on the class and method.
+A `PrefixComparator` object is obtained by calling `PrefixComparator.getComparator` with an integer argument `r`, the size of the prefix for comparison purposes. The value is stored in the instance variable `myPrefixSize` as you'll see in the code. This class is used in `BinarySearchAutocomplete`, but not in `BruteAutocomplete`. **See the [details document](docs/details.md) for details on the class and method**.
 
 You can test your code with the `TestTerm` JUnit class which has several tests for the `PrefixComparator` class.
 
 ## Part 3: Implement `BinarySearchLibrary`
 
-The class `BinarySearchLibrary` stores static utility methods used in the implementation of the `BinarySearchAutocomplete` class. You will need to implement two methods in particular: `firstIndex` and `lastIndex`. Both are variants on the Java API [`Collections.binarySearch(list, key, c)`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#binarySearch(java.util.List,T,java.util.Comparator)) method that, in addition to returning an index `dex` such that `c.compare(list.get(dex), key)==0`, also guarantee to find the first or last such index respectively. Details on the methods you write are [in the details document](docs/details.md).
+The class `BinarySearchLibrary` stores static utility methods used in the implementation of the `BinarySearchAutocomplete` class. You will need to implement two methods in particular: `firstIndex` and `lastIndex`. Both are variants on the Java API [`Collections.binarySearch(list, key, c)`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#binarySearch(java.util.List,T,java.util.Comparator)) method that, in addition to returning an index `dex` such that `c.compare(list.get(dex), key)==0`, also guarantee to find the first or last such index respectively. **Details on the methods you write are [in the details document](docs/details.md).**
 
 `BinarySearchAutocomplete` will use these methods along with the `PrefixComparator` you already completed to efficiently determine the *range of possible completions of a given prefix of a word typed so far*.
 
@@ -55,13 +55,13 @@ Code in static methods `firstIndexOf` and `lastIndexOf` is written to use the AP
 
 You'll also see a `Term` object called `dummy` created from the `String` passed to `topMatches`. The weight for the `Term` doesn't matter since only the `String` field of the `Term` is used in `firstIndex` and `lastIndex` calls.
 
-See the [details document](docs/details.md) for more information on this class and method.
+**See the [details document](docs/details.md) for more information on this class and method.**
 
 ## Part 5: Implement `HashListAutocomplete`
 
 In this part, you will provide one more implementation of the `Autocompletor` interface, this time from scratch. Unlike `BruteAutocomplete` and `BinarySearchAutocomplete`, this third implementation will be based on the use of a `HashMap` instead of the binary search algorithm. This class will provide an `O(1)` implementation of `topMatches` --- with a tradeoff of requiring more memory.
 
-A skeleton of `HashListAutocomplete` can be found in the `HashListAutocomplete.java` file that `implements` the `Autocompletor` interface. For details about the class and code you write see [the details document](docs/details.md).
+A skeleton of `HashListAutocomplete` can be found in the `HashListAutocomplete.java` file that `implements` the `Autocompletor` interface. **For details about the class and code you write see [the details document](docs/details.md).**
 
 
 ## Benchmarking and Analysis
