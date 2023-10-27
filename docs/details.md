@@ -133,17 +133,15 @@ the value at index `high` in the code for `firstIndex`.
 
 ### Testing BinarySearchLibrary Methods
 
-You're given two classes to help verify that your methods are correct and meet performance requirements. The JUnit tests in `TestBinarySearchLibrary` can help you verify that your methods return the correct values. The output of running `BinaryBenchmark` can help verify both ***correctness and performance requirements.*** The output using a correct `BinarySearchLibrary` class is shown below when running `BinaryBenchmark`. The values in both `index` columns should be the same: the location of the first occurrence of the prefix shown. The `cslow` column is the number of comparisons made by the slow implementation `firstIndexSlow`. The `cfast` column is the number of comparisons made by `firstIndex`. Note that $`log2(26000)`$ is 14.666, and that 1+15 = 16, so the performance criterion is met.
+You're given two classes to help verify that your methods are correct and meet performance requirements. The JUnit tests in `TestBinarySearchLibrary` can help you verify that your methods return the correct values. The output of running `BinaryBenchmark` can help verify both ***correctness and performance requirements.*** The output using a correct `BinarySearchLibrary` class is shown below when running `BinaryBenchmark` (note,the code is actually in the `firstMatch` method you'll copy to `BinarySearchLibrary`). The values in both `index` columns should be the same: the location of the first occurrence of the target `banana`. The `scomps` column is the number of comparisons made by the slow implementation `firstIndexSlow`. The `fcomps` column is the number of comparisons made by code you'll move to `firstIndex`. You can modify to test for `lastIndex` to see if it's similar.
 ```
-size of list = 26000
-Prefix index    index	  cslow   cfast
-
-aaa	     0	      0	   817	15
-fff	  5000	   5000	   693	16
-kkk	 10000    10000	   568	16
-ppp	 15000    15000	   443	16
-uuu	 20000    20000	   318	15
-zzz	 25000    25000	   194	16
+   size	  sdex  scomps fdex fcomps
+    1024	0	644	    0	13
+    2048	0	1297	0	14
+    4096	0	2578	0	15
+    8192	0	5139	0	16
+   16384	0	10260	0	17
+   32768	0	20501	0	18
 ```
 
 ### BinarySearchAutocomplete topMatches
