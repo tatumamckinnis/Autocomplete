@@ -111,12 +111,35 @@ public class BinarySearchAutocomplete implements Autocompletor {
 		if (first == -1) {               // prefix not found
 			return new ArrayList<>();
 		}
+		
+		PriorityQueue<Term> pq = 
+				new PriorityQueue<>(Comparator.comparing(Term::getWeight));
+		for (Term t : myTerms) {
+			if (!t.getWord().startsWith(prefix)) {
+				continue; // don't process if doesn't begin with prefix
+			}
+			
+			if (pq.size() < k) {
+				pq.add(t);
+			} else if (pq.peek().getWeight() < t.getWeight()) {
+				pq.remove();
+				pq.add(t);
+			}
+			
+		}
+		// after loop, pq holds *at most* k Terms and
+		// these are terms that are the "heaviest" based on code above
+		// since pq is a min-pq, lightest/least-heavy is first to be removed
 
-		// write code here for assignment
+		int numResults = Math.min(k, pq.size());
+		LinkedList<Term> ret = new LinkedList<>();
+		for (int i = 0; i < numResults; i++) {
+			ret.addFirst(pq.remove());
+		}
+		return ret;
 
-		return null;
 	
-	}
+}
 
 	@Override
 	public void initialize(String[] terms, double[] weights) {
