@@ -5,8 +5,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class HashListAutocomplete implements Autocompletor {
-    public static int MAX_PREFIX = 10;
-    public HashMap<String, ArrayList<Term>> map;
+    private static int MAX_PREFIX = 10;
+    private HashMap<String, ArrayList<Term>> map;
     private int mySize;
 
     public HashListAutocomplete(String[] terms, double[] weights) {
@@ -34,8 +34,7 @@ public class HashListAutocomplete implements Autocompletor {
         List<Term> all = map.get(prefix);
 
         if (all != null) {
-            
-            Collections.sort(all, Collections.reverseOrder(Comparator.comparing(Term::getWeight)));
+    
             
            
             return all.subList(0, Math.min(k, all.size()));
@@ -65,10 +64,10 @@ public void initialize(String[] terms, double[] weights)
 				}
 			}
 		}
-		Comparator<Term> comparator = Comparator.comparing(Term::getWeight);
+		
 
 for (String key : map.keySet()) {
-    Collections.sort(map.get(key), comparator);
+    Collections.sort(map.get(key), Collections.reverseOrder(Comparator.comparing(Term::getWeight)));
 }
 
 	}
