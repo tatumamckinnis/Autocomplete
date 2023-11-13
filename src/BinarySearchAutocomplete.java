@@ -99,14 +99,53 @@ public class BinarySearchAutocomplete implements Autocompletor {
 	
 	@Override
 	public List<Term> topMatches(String prefix, int k) {
+	// 	    public List<Term> topMatches(String prefix, int k) {
+    //     if (k < 0) {
+    //         throw new IllegalArgumentException("Illegal value of k:" + k);
+    //     }
+
+        
+    //     int first = firstIndexOf(myTerms, new Term(prefix, 0), Comparator.comparing(Term::getWord));
+    //     int last = lastIndexOf(myTerms, new Term(prefix, 0), Comparator.comparing(Term::getWord));
+
+    //     if (first == -1) {
+            
+    //         return new ArrayList<>();
+    //     }
+
+        
+    //     PriorityQueue<Term> pq = new PriorityQueue<>(Comparator.comparing(Term::getWeight));
+
+    //     for (int i = first; i <= last; i++) {
+    //         Term t = myTerms[i];
+    //         if (pq.size() < k) {
+    //             pq.add(t);
+    //         } else if (pq.peek().getWeight() < t.getWeight()) {
+    //            pq.poll();
+    //            pq.add(t);
+    //         }
+    //     }
+
+        
+    //     List<Term> result = new ArrayList<>();
+    //     while (!pq.isEmpty()) {
+    //         result.add(0, pq.poll()); 
+    //     }
+
+    //     return result;
+    // }
 		if (k < 0) {
 			throw new IllegalArgumentException("Illegal value of k:"+k);
+		}
+		if (k==0)
+		{
+			return new ArrayList<>();
 		}
 
 		Term dummy = new Term(prefix,0);
 		PrefixComparator comp = PrefixComparator.getComparator(prefix.length());
 		int first = firstIndexOf(myTerms, dummy, comp);
-		int last = lastIndexOf(myTerms, dummy, comp);
+		//int last = lastIndexOf(myTerms, dummy, comp);
 
 		if (first == -1) {               // prefix not found
 			return new ArrayList<>();
@@ -138,8 +177,8 @@ public class BinarySearchAutocomplete implements Autocompletor {
 		}
 		return ret;
 
-	
-}
+	}
+
 
 	@Override
 	public void initialize(String[] terms, double[] weights) {
@@ -164,3 +203,4 @@ public class BinarySearchAutocomplete implements Autocompletor {
 		return mySize;
 	}
 }
+
