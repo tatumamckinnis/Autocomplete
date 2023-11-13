@@ -98,52 +98,50 @@ public class BinarySearchAutocomplete implements Autocompletor {
 	 */
 	
 	@Override
-	public List<Term> topMatches(String prefix, int k) {
 
-		if (k < 0) {
-			throw new IllegalArgumentException("Illegal value of k:"+k);
-		}
-		if (k==0)
+	public List<Term> topMatches(String prefix, int k) {
+    if (k < 0) {
+        throw new IllegalArgumentException("Illegal value of k:" + k);
+    }
+	if (k==0)
 		{
 			return new ArrayList<>();
 		}
+		Term dummy = new Term(prefix,0);
+	PrefixComparator comp = PrefixComparator.getComparator(prefix.length());
+int first = firstIndexOf(myTerms, dummy, comp);
+int last = lastIndexOf(myTerms, dummy, comp);
+		if (first == -1) {               // prefix not found
+	return new ArrayList<>();
+ }
 
-		// Term dummy = new Term(prefix,0);
-		// PrefixComparator comp = PrefixComparator.getComparator(prefix.length());
-		//int first = firstIndexOf(myTerms, dummy, comp);
-		//int last = lastIndexOf(myTerms, dummy, comp);
 
-		// if (first == -1) {               // prefix not found
-		// 	return new ArrayList<>();
-		// }
-		
-		PriorityQueue<Term> pq = 
-				new PriorityQueue<>(Comparator.comparing(Term::getWeight));
-		for (Term t : myTerms) {
-			if (!t.getWord().startsWith(prefix)) {
-				continue; // don't process if doesn't begin with prefix
-			}
-			
-			if (pq.size() < k) {
-				pq.add(t);
-			} else if (pq.peek().getWeight() < t.getWeight()) {
-				pq.remove();
-				pq.add(t);
-			}
-			
-		}
-		// after loop, pq holds *at most* k Terms and
-		// these are terms that are the "heaviest" based on code above
-		// since pq is a min-pq, lightest/least-heavy is first to be removed
 
-		int numResults = Math.min(k, pq.size());
-		LinkedList<Term> ret = new LinkedList<>();
-		for (int i = 0; i < numResults; i++) {
-			ret.addFirst(pq.remove());
-		}
-		return ret;
+    
+    PriorityQueue<Term> pq = new PriorityQueue<>(Comparator.comparing(Term::getWeight));
 
-	}
+
+    for (int i = first; i <= last; i++) {
+        Term t = myTerms[i];
+
+
+        if (pq.size() < k) {
+            pq.add(t);
+        } else if (pq.peek().getWeight() < t.getWeight()) {
+            pq.poll();
+            pq.add(t);
+        }
+    }
+
+
+    List<Term> result = new ArrayList<>(pq);
+
+
+    result.sort(Comparator.comparing(Term::getWeight).reversed());
+
+    return result;
+}
+
 
 
 	@Override
